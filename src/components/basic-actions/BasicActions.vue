@@ -53,9 +53,6 @@ export default {
     isMetaMaskConnected() { return this.accounts && this.accounts.length > 0 },
     forwarderOrigin() { return this.currentUrl.hostname === 'localhost' ? 'http://localhost:9010' : undefined; }
   },
-  mounted() {
-
-  },
   methods: {
     async onClickConnect() {
         try {
@@ -79,6 +76,7 @@ export default {
         this.accountsResult = `Error: ${err.message}`;
       }
     },
+    // Move to global helper class?
     handleNewAccounts(newAccounts) {
       this.accounts = newAccounts;
       if (this.isMetaMaskConnected) {
@@ -101,13 +99,4 @@ export default {
 </script>
 
 <style scoped>
-section {
-  margin: 20px 0 20px 0;
-}
-.info-text {
-  font-size: 1.1em;
-}
-.card {
-  margin-bottom: 20px;
-}
 </style>
