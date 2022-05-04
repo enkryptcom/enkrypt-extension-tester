@@ -2,7 +2,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <header>
+        <div id="logo-container">
+          <h1 id="logo-text" class="text-center">
+            E2E Test Dapp
+          </h1>
+          <img alt="mew-logo" src="./assets/logo.png">
+        </div>
+      </header>
   <basic-actions 
   :ethereum="ethereum"/>
 </template>
