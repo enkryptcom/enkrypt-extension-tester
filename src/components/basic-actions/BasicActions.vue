@@ -72,7 +72,7 @@ export default {
         this.accountsResult =
           _accounts[0] || 'Not able to get accounts';
       } catch (err) {
-        console.error(err);
+        console.log(err);
         this.accountsResult = `Error: ${err.message}`;
       }
     },

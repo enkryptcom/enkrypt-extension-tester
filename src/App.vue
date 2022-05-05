@@ -1,58 +1,30 @@
 <template>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
-  <header>
-        <div id="logo-container">
-          <h1 id="logo-text" class="text-center">
-            E2E Test Dapp
-          </h1>
-          <img alt="mew-logo" src="./assets/logo.png">
-        </div>
-      </header>
-  <basic-actions 
-  :ethereum="ethereum"/>
+  <v-app>
+    <NavMenu />
+    <v-main>
+      <router-view />
+    </v-main>
+    <TheFooter />
+  </v-app>
 </template>
 
-<script>
-import BasicActions from "./components/basic-actions/BasicActions.vue";
-import {ethers} from 'ethers';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import NavMenu from '@/components/NavMenu/NavMenu.vue';
+import TheFooter from '@/components/TheFooter/TheFooter.vue';
 
-export default {
-  name: "App",
+export default defineComponent({
+  name: 'App',
   components: {
-    BasicActions,
+    NavMenu,
+    TheFooter
   },
-  data(){
-    return{
-      ethereum:{},
-      ethersProvider: {}
-    }
-  },
-  mounted(){
-    this.initialize();
-  },
-  methods:{
-    async initialize() {
-      try {
-        // We must specify the network as 'any' for ethers to allow network changes
-        this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-        this.ethereum = window.ethereum;
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  data() {
+    return {};
   }
-};
+});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+@import '@/styles/base.scss';
 </style>
