@@ -1,7 +1,7 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions /></v-col>
+      <v-col cols="12" md="4"><BasicActions :ethereum="ethereum"/></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
@@ -36,6 +36,7 @@ import EthereumChainInteractions from './components/EthereumChainInteractions/Et
 import SendForm from './components/SendForm/SendForm.vue';
 
 import { defineComponent } from 'vue';
+import { ethers } from 'ethers';
 
 export default defineComponent({
   name: 'DappTester',
@@ -54,6 +55,17 @@ export default defineComponent({
     SignTypedDataV4,
     EthereumChainInteractions,
     SendForm
+  },
+  data(){
+    return{
+      ethersProvider: {},
+      ethereum: {}
+    }
+  },
+  mounted(){
+    // We must specify the network as 'any' for ethers to allow network changes
+    this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    this.ethereum = window.ethereum;
   }
 });
 </script>
