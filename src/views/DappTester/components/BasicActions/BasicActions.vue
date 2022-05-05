@@ -1,5 +1,8 @@
 <template>
   <CustomCard title="Basic Actions">
+    <div class="font-weight-bold">Network: null</div>
+    <div class="font-weight-bold">ChainId: null</div>
+    <div class="font-weight-bold">Accounts: null</div>
     <CustomBtn 
       :disabled="isDisabled"
       @click="onClickConnect"
