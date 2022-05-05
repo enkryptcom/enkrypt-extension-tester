@@ -1,5 +1,9 @@
 <template>
   <CustomCard title="Basic Actions">
+    <div class="font-weight-bold">Network: null</div>
+    <div class="font-weight-bold">ChainId: null</div>
+    <div class="font-weight-bold">Accounts: null</div>
+
     <CustomBtn>Connect</CustomBtn>
     <CustomBtn>eth_accounts</CustomBtn>
     <CustomTextbox title="eth_accounts result">null</CustomTextbox>
