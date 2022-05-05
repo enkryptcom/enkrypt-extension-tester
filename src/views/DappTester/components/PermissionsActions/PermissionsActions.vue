@@ -1,8 +1,8 @@
 <template>
   <CustomCard title="Permissions Actions">
-    <CustomBtn>Request Permissions</CustomBtn>
-    <CustomBtn>Get Permissions</CustomBtn>
-    <CustomTextbox title="Permissions result">null</CustomTextbox>
+    <CustomBtn @click="requestPermissions">Request Permissions</CustomBtn>
+    <CustomBtn @click="getPermissions">Get Permissions</CustomBtn>
+    <CustomTextbox title="Permissions result">{{permissionsResult}}</CustomTextbox>
   </CustomCard>
 </template>
 
@@ -14,6 +14,53 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 
 export default defineComponent({
   name: 'ModulePermissionsActions',
-  components: { CustomCard, CustomTextbox, CustomBtn }
+  components: { CustomCard, CustomTextbox, CustomBtn },
+  props:{
+    ethereum:{
+      type: Object,
+      default: null
+    }
+  },
+  data(){
+    return {
+      permissionsResult: ''
+    }
+  },
+  methods:{
+    async requestPermissions() {
+      try {
+        const permissionsArray = await this.ethereum.request({
+          method: 'wallet_requestPermissions',
+          params: [{ eth_accounts: {} }],
+        });
+        this.permissionsResult =
+          this.getPermissionsDisplayString(permissionsArray);
+      } catch (err) {
+        console.log(err);
+        this.permissionsResult = `Error: ${err.message}`;
+      }
+    },
+    async getPermissions() {
+      try {
+        const permissionsArray = await this.ethereum.request({
+          method: 'wallet_getPermissions',
+        });
+        this.permissionsResult =
+          this.getPermissionsDisplayString(permissionsArray);
+      } catch (err) {
+        console.log(err);
+        this.permissionsResult = `Error: ${err.message}`;
+      }
+    },
+    getPermissionsDisplayString(permissionsArray) {
+      if (permissionsArray.length === 0) {
+        return 'No permissions found.';
+      }
+      const permissionNames = permissionsArray.map((perm) => perm.parentCapability);
+      return permissionNames
+        .reduce((acc, name) => `${acc}${name}, `, '')
+        .replace(/, $/u, '');
+    }
+  }
 });
 </script>
