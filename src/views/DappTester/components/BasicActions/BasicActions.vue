@@ -4,7 +4,7 @@
       :disabled="isDisabled"
       @click="onClickConnect"
     >
-      Connect
+      {{btnText}}
     </CustomBtn>
     <CustomBtn @click="getAccounts">
       eth_accounts
@@ -66,7 +66,6 @@ export default defineComponent({
     handleNewAccounts(newAccounts) {
       this.accounts = newAccounts;
       if (this.isMetaMaskConnected) {
-        console.log('connected');
         //initializeAccountButtons();
       }
       this.updateButtons();
