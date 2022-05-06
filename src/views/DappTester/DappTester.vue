@@ -1,11 +1,18 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions :ethereum="ethereum"/></v-col>
+      <v-col cols="12" md="4"><BasicActions 
+        :ethereum="ethereum" 
+        :setAccounts="setAccounts"
+      /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
-      <v-col cols="12" md="4"><SendTokens :ethereum="ethereum"/></v-col>
+      <v-col cols="12" md="4"><SendTokens 
+        :ethereum="ethereum" 
+        :accounts="accounts" 
+        :hstFactory="hstFactory"
+      /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
       <v-col cols="12" md="4"><Collectibles /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
@@ -39,6 +46,16 @@ import SendForm from './components/SendForm/SendForm.vue';
 
 import { defineComponent } from 'vue';
 import { ethers } from 'ethers';
+import {
+  hstBytecode,
+  hstAbi,
+  piggybankBytecode,
+  piggybankAbi,
+  collectiblesAbi,
+  collectiblesBytecode,
+  failingContractAbi,
+  failingContractBytecode,
+} from '@/assets/json/constants.json';
 
 export default defineComponent({
   name: 'DappTester',
@@ -62,13 +79,27 @@ export default defineComponent({
   data(){
     return{
       ethersProvider: {},
-      ethereum: {}
+      ethereum: {},
+      hstFactory: {},
+      accounts: []
     }
   },
   mounted(){
     // We must specify the network as 'any' for ethers to allow network changes
     this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
     this.ethereum = window.ethereum;
+    console.log(this.ethersProvider.getSigner());
+    this.hstFactory = new ethers.ContractFactory(
+      hstAbi,
+      hstBytecode,
+      this.ethersProvider.getSigner(),
+    );
+    console.log(this.hstFactory);
+  },
+  methods:{
+    setAccounts(accounts){
+      this.accounts = accounts;
+    }
   }
 });
 </script>

@@ -35,6 +35,12 @@ export default defineComponent({
         return {};
       },
       type: Function
+    },
+    setAccounts: {
+      type: Function,
+      default: function (){
+        return {};
+      }
     }
   },
   data() {
@@ -85,6 +91,7 @@ export default defineComponent({
     // Move to global helper class?
     handleNewAccounts(newAccounts) {
       this.accounts = newAccounts;
+      this.setAccounts(newAccounts);
       if (this.isMetaMaskConnected) {
         //initializeAccountButtons();
       }
