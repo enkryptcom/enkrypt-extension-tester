@@ -9,7 +9,7 @@
       <v-col cols="12" md="4"><Collectibles /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
       <v-col cols="12" md="4"><EthSign :signer="ethersSigner" /></v-col>
-      <v-col cols="12" md="4"><PersonalSign /></v-col>
+      <v-col cols="12" md="4"><PersonalSign :signer="ethersSigner" /></v-col>
       <v-col cols="12" md="4"><SignTypedData /></v-col>
       <v-col cols="12" md="4"><SignTypedDataV3 /></v-col>
       <v-col cols="12" md="4"><SignTypedDataV4 /></v-col>
