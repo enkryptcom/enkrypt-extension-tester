@@ -1,30 +1,41 @@
 <template>
   <CustomCard title="Send Tokens">
-    <div class="font-weight-bold">Token: {{tokenAddress}}</div>
+    <div class="font-weight-bold">Token: {{ tokenAddress }}</div>
     <CustomBtn @click="createToken">Create Token</CustomBtn>
-    <CustomBtn :disabled="watchDisabled" @click="watchAssetClick">Add Token to Wallet</CustomBtn>
-    <CustomBtn :disabled="transferDisabled" @click="transferTokensClick">Transfer Tokens</CustomBtn>
-    <CustomBtn :disabled="approveDisabled" @click="approveTokensClick">Approve Tokens</CustomBtn>
-    <CustomBtn :disabled="transferNoGasDisabled" @click="transferTokensWithoutGasClick">Transfer Tokens Without Gas</CustomBtn>
-    <CustomBtn :disabled="approveNoGasDisabled" @click="approveTokensWithoutGasClick">Approve Tokens Without Gas</CustomBtn>
+    <CustomBtn :disabled="watchDisabled" @click="watchAssetClick"
+      >Add Token to Wallet</CustomBtn
+    >
+    <CustomBtn :disabled="transferDisabled" @click="transferTokensClick"
+      >Transfer Tokens</CustomBtn
+    >
+    <CustomBtn :disabled="approveDisabled" @click="approveTokensClick"
+      >Approve Tokens</CustomBtn
+    >
+    <CustomBtn
+      :disabled="transferNoGasDisabled"
+      @click="transferTokensWithoutGasClick"
+      >Transfer Tokens Without Gas</CustomBtn
+    >
+    <CustomBtn
+      :disabled="approveNoGasDisabled"
+      @click="approveTokensWithoutGasClick"
+      >Approve Tokens Without Gas</CustomBtn
+    >
   </CustomCard>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {ethers} from 'ethers';
+import { ethers } from 'ethers';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import {
-  hstBytecode,
-  hstAbi
-} from '@/assets/json/constants.json';
+import { hstBytecode, hstAbi } from '@/assets/json/constants.json';
 
 export default defineComponent({
   name: 'SendTokens',
   components: { CustomCard, CustomBtn },
-  props:{
-    ethereum:{
+  props: {
+    ethereum: {
       type: Object,
       default: null
     },
@@ -32,7 +43,7 @@ export default defineComponent({
       type: Array,
       default: {}
     },
-    ethersSigner:{
+    ethersSigner: {
       type: Object,
       default: {}
     }
@@ -47,20 +58,9 @@ export default defineComponent({
       approveNoGasDisabled: true,
       contract: {},
       hstFactory: {}
-    }
+    };
   },
-  watch:{
-    ethereum: {
-      handler: function() {
-        this.hstFactory = new ethers.ContractFactory(
-          hstAbi,
-          hstBytecode,
-          this.ethersSigner
-        )
-      }
-    }
-  },
-  methods:{
+  methods: {
     async createToken() {
       const _initialAmount = 100;
       const _tokenName = 'TST';
@@ -68,11 +68,16 @@ export default defineComponent({
       const _tokenSymbol = 'TST';
 
       try {
-        this.contract = await this.hstFactory.deploy(
+        const hstFactory = new ethers.ContractFactory(
+          hstAbi,
+          hstBytecode,
+          this.ethersSigner as ethers.Signer
+        );
+        this.contract = await hstFactory.deploy(
           _initialAmount,
           _tokenName,
           _decimalUnits,
-          _tokenSymbol,
+          _tokenSymbol
         );
         console.log(this.contract);
         await this.contract.deployTransaction.wait();
@@ -81,7 +86,7 @@ export default defineComponent({
         }
 
         console.log(
-          `Contract mined! address: ${this.contract.address} transactionHash: ${this.contract.transactionHash}`,
+          `Contract mined! address: ${this.contract.address} transactionHash: ${this.contract.transactionHash}`
         );
         this.tokenAddress = this.contract.address;
         this.watchDisabled = false;
@@ -95,7 +100,8 @@ export default defineComponent({
       }
     },
     async watchAssetClick() {
-      if(this.tokenAddress == 'Creation Failed' || this.tokenAddress == 'null') return;
+      if (this.tokenAddress == 'Creation Failed' || this.tokenAddress == 'null')
+        return;
       const result = await this.ethereum.request({
         method: 'wallet_watchAsset',
         params: {
@@ -104,9 +110,9 @@ export default defineComponent({
             address: this.tokenAddress,
             symbol: this.contract.tokenSymbol,
             decimals: this.contract.decimalUnits,
-            image: '@/assets/images/logo-mew.svg',
-          },
-        },
+            image: '@/assets/images/logo-mew.svg'
+          }
+        }
       });
       console.log('result', result);
     },
@@ -117,8 +123,8 @@ export default defineComponent({
         {
           from: this.accounts[0],
           gasLimit: 60000,
-          gasPrice: '20000000000',
-        },
+          gasPrice: '20000000000'
+        }
       );
       console.log('result', result);
     },
@@ -129,8 +135,8 @@ export default defineComponent({
         {
           from: this.accounts[0],
           gasLimit: 60000,
-          gasPrice: '20000000000',
-        },
+          gasPrice: '20000000000'
+        }
       );
       console.log(result);
     },
@@ -139,8 +145,8 @@ export default defineComponent({
         '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
         '15000',
         {
-          gasPrice: '20000000000',
-        },
+          gasPrice: '20000000000'
+        }
       );
       console.log('result', result);
     },
@@ -149,8 +155,8 @@ export default defineComponent({
         '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
         '70000',
         {
-          gasPrice: '20000000000',
-        },
+          gasPrice: '20000000000'
+        }
       );
       console.log(result);
     }
