@@ -45,7 +45,8 @@ export default defineComponent({
       approveDisabled: true,
       transferNoGasDisabled: true,
       approveNoGasDisabled: true,
-      contract: {}
+      contract: {},
+      hstFactory: {}
     }
   },
   watch:{
