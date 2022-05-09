@@ -12,8 +12,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {ethers} from 'ethers';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+import {
+  hstBytecode,
+  hstAbi
+} from '@/assets/json/constants.json';
 
 export default defineComponent({
   name: 'SendTokens',
@@ -23,12 +28,12 @@ export default defineComponent({
       type: Object,
       default: null
     },
-    hstFactory: {
-      type: Object,
-      default: null
-    },
     accounts: {
       type: Array,
+      default: {}
+    },
+    ethersSigner:{
+      type: Object,
       default: {}
     }
   },
@@ -40,11 +45,19 @@ export default defineComponent({
       approveDisabled: true,
       transferNoGasDisabled: true,
       approveNoGasDisabled: true,
-      contract: undefined
+      contract: {}
     }
   },
-  mounted(){
-    // Code
+  watch:{
+    ethereum: {
+      handler: function() {
+        this.hstFactory = new ethers.ContractFactory(
+          hstAbi,
+          hstBytecode,
+          this.ethersSigner
+        )
+      }
+    }
   },
   methods:{
     async createToken() {
