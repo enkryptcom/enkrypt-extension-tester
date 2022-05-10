@@ -3,6 +3,9 @@
     <v-row>
       <v-col cols="12" md="4"
         ><BasicActions
+          :ethereum="ethereum"
+          @setChainId="setChainId"
+          @setNetworkId="setNetworkId"
           @setFromAccount="setFromAccount"
           @setIsConnected="setIsConnected"
       /></v-col>
@@ -15,10 +18,14 @@
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
       <v-col cols="12" md="4"
-        ><SignTypedData :from-account="fromAccount" :is-connected="isConnected"
+        ><SignTypedData
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV3
+          :ethereum="ethereum"
           :from-account="fromAccount"
           :is-connected="isConnected"
           :network-id="networkId"
@@ -26,6 +33,7 @@
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV4
+          :ethereum="ethereum"
           :from-account="fromAccount"
           :is-connected="isConnected"
           :network-id="networkId"
@@ -62,7 +70,7 @@ export default defineComponent({
     return {
       fromAccount: '',
       isConnected: false,
-      ethereumProvider: {},
+      ethersProvider: {},
       ethereum: {},
       networkId: '',
       chainId: ''
@@ -112,6 +120,12 @@ export default defineComponent({
     },
     setIsConnected(bool) {
       this.isConnected = bool;
+    },
+    setChainId(id) {
+      this.chainId = id;
+    },
+    setNetworkId(id) {
+      this.networkid = id;
     }
   }
 });

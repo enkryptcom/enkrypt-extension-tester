@@ -27,12 +27,21 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { toChecksumAddress } from 'ethereumjs-util';
 import { recoverTypedSignature } from 'eth-sig-util';
-import { ethers } from 'ethers';
 
 export default defineComponent({
   name: 'ModuleSignTypedDataV3',
   components: { CustomCard, CustomTextbox, CustomBtn },
   props: {
+    ethereum: {
+      type: Object,
+      default: null
+    },
+    handleEIP1559Support: {
+      default: function () {
+        return {};
+      },
+      type: Function
+    },
     fromAccount: {
       type: String,
       default: () => ''
@@ -58,13 +67,6 @@ export default defineComponent({
       isDisabled: false,
       isVerified: false
     };
-  },
-  mounted() {
-    this.ethereum = window.ethereum;
-    this.ethereumProvider = new ethers.providers.Web3Provider(
-      window.ethereum,
-      'any'
-    );
   },
   methods: {
     async signV3() {
