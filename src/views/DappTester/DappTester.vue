@@ -20,52 +20,52 @@
 </template>
 
 <script lang="ts">
-  import BasicActions from './components/BasicActions/BasicActions.vue';
-  import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
-  import SendEth from './components/SendEth/SendEth.vue';
-  import Contract from './components/Contract/Contract.vue';
-  import FailingContract from './components/FailingContract/FailingContract.vue';
-  import Collectibles from './components/Collectibles/Collectibles.vue';
-  import EncryptDecrypt from './components/EncryptDecrypt/EncryptDecrypt.vue';
-  import EthSign from './components/EthSign/EthSign.vue';
-  import PersonalSign from './components/PersonalSign/PersonalSign.vue';
-  import SignTypedData from './components/SignTypedData/SignTypedData.vue';
-  import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
-  import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
-  import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
-  import SendForm from './components/SendForm/SendForm.vue';
+import BasicActions from './components/BasicActions/BasicActions.vue';
+import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
+import SendEth from './components/SendEth/SendEth.vue';
+import Contract from './components/Contract/Contract.vue';
+import FailingContract from './components/FailingContract/FailingContract.vue';
+import Collectibles from './components/Collectibles/Collectibles.vue';
+import EncryptDecrypt from './components/EncryptDecrypt/EncryptDecrypt.vue';
+import EthSign from './components/EthSign/EthSign.vue';
+import PersonalSign from './components/PersonalSign/PersonalSign.vue';
+import SignTypedData from './components/SignTypedData/SignTypedData.vue';
+import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
+import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
+import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
+import SendForm from './components/SendForm/SendForm.vue';
 
-  import { defineComponent } from 'vue';
-  import { ethers } from 'ethers';
+import { defineComponent } from 'vue';
+import { ethers } from 'ethers';
 
-  export default defineComponent({
-    name: 'DappTester',
-    components: {
-      BasicActions,
-      PermissionsActions,
-      SendEth,
-      Contract,
-      FailingContract,
-      Collectibles,
-      EncryptDecrypt,
-      EthSign,
-      PersonalSign,
-      SignTypedData,
-      SignTypedDataV3,
-      SignTypedDataV4,
-      EthereumChainInteractions,
-      SendForm,
-    },
-    data() {
-      return {
-        ethersProvider: {},
-        ethereum: {},
-      };
-    },
-    mounted() {
-      // We must specify the network as 'any' for ethers to allow network changes
-      this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-      this.ethereum = window.ethereum;
-    },
-  });
+export default defineComponent({
+  name: 'DappTester',
+  components: {
+    BasicActions,
+    PermissionsActions,
+    SendEth,
+    Contract,
+    FailingContract,
+    Collectibles,
+    EncryptDecrypt,
+    EthSign,
+    PersonalSign,
+    SignTypedData,
+    SignTypedDataV3,
+    SignTypedDataV4,
+    EthereumChainInteractions,
+    SendForm
+  },
+  data() {
+    return {
+      ethersProvider: {},
+      ethereum: {}
+    };
+  },
+  mounted() {
+    // We must specify the network as 'any' for ethers to allow network changes
+    this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    this.ethereum = window.ethereum;
+  }
+});
 </script>

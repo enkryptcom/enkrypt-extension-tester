@@ -9,9 +9,7 @@
       {{ btnText }}
     </CustomBtn>
     <CustomBtn @click="getAccounts"> eth_accounts </CustomBtn>
-    <CustomTextbox title="eth_accounts result">{{
-        accountsResult
-    }}</CustomTextbox>
+    <CustomTextbox title="eth_accounts result">{{ accountsResult }}</CustomTextbox>
   </CustomCard>
 </template>
 
@@ -40,7 +38,6 @@ const isMetaMaskConnected = () => {
   return accounts.value && accounts.value.length > 0;
 };
 const onClickConnect = async () => {
-  console.log(ethereum);
   try {
     const newAccounts = await ethereum.request({
       method: 'eth_requestAccounts'
