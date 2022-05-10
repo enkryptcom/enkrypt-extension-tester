@@ -4,8 +4,8 @@
     <div class="font-weight-bold">ChainId: null</div>
     <div class="font-weight-bold">Accounts: null</div>
 
-    <CustomBtn @click="getAccounts">Connect</CustomBtn>
-    <CustomBtn>eth_accounts</CustomBtn>
+    <CustomBtn @click="connectAccount">Connect</CustomBtn>
+    <CustomBtn @click="getAccount">eth_accounts</CustomBtn>
     <CustomTextbox title="eth_accounts result">{{
       this.accounts
     }}</CustomTextbox>
@@ -25,6 +25,7 @@ export default defineComponent({
   data() {
     return {
       accounts: null,
+      accountsResult: null,
       ethereumProvider: {},
       ethereum: {}
     };
@@ -42,7 +43,7 @@ export default defineComponent({
     this.ethereum = window.ethereum;
   },
   methods: {
-    async getAccounts() {
+    async connectAccount() {
       try {
         const newAccounts = await this.ethereum.request({
           method: 'eth_requestAccounts'
@@ -50,6 +51,17 @@ export default defineComponent({
         this.handleNewAccounts(newAccounts);
       } catch (err) {
         console.error(err);
+      }
+    },
+    async getAccount() {
+      try {
+        const _accounts = await this.ethereum.request({
+          method: 'eth_accounts'
+        });
+        this.accountsResult = _accounts[0] || 'Not able to get accounts';
+      } catch (err) {
+        console.error(err);
+        this.accountsResult = `Error: ${err.message}`;
       }
     },
     handleNewAccounts(newAccounts) {

@@ -49,7 +49,8 @@ export default defineComponent({
       isSigned: false,
       isDisabled: false,
       isVerified: false,
-      networkId: '1'
+      networkId: null,
+      chainId: null
     };
   },
   mounted() {
@@ -58,11 +59,28 @@ export default defineComponent({
       window.ethereum,
       'any'
     );
+    this.getNewNetwork();
   },
   methods: {
+    async getNewNetwork() {
+      try {
+        const networkId = await this.ethereum.request({
+          method: 'net_version'
+        });
+        this.networkId = networkId;
+        console.log('this.networkId:', this.networkId);
+        const chainId = await this.ethereum.request({
+          method: 'eth_chainId'
+        });
+        this.chainId = chainId;
+        console.log('this.chainId:', this.chainId);
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async signV3() {
       const networkId = this.networkId;
-      const chainId = networkId;
+      const chainId = this.chainId || networkId;
       const msgParams = {
         types: {
           EIP712Domain: [
