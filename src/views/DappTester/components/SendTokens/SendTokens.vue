@@ -56,15 +56,15 @@ export default defineComponent({
       approveDisabled: true,
       transferNoGasDisabled: true,
       approveNoGasDisabled: true,
-      contract: {}
+      contract: {},
+      _initialAmount: 100,
+      _tokenName: 'TST',
+      _decimalUnits: 4,
+      _tokenSymbol: 'TST'
     };
   },
   methods: {
     async createToken() {
-      const _initialAmount = 100;
-      const _tokenName = 'TST';
-      const _decimalUnits = 4;
-      const _tokenSymbol = 'TST';
 
       try {
         const hstFactory = new ethers.ContractFactory(
@@ -73,10 +73,10 @@ export default defineComponent({
           this.ethersSigner as ethers.Signer
         );
         const contract = await hstFactory.deploy(
-          _initialAmount,
-          _tokenName,
-          _decimalUnits,
-          _tokenSymbol
+          this._initialAmount,
+          this._tokenName,
+          this._decimalUnits,
+          this._tokenSymbol
         );
         const receipt = await contract.deployTransaction.wait();
         if (contract.address === undefined) {
@@ -107,8 +107,8 @@ export default defineComponent({
           type: 'ERC20',
           options: {
             address: this.tokenAddress,
-            symbol: await this.contract.symbol(),
-            decimals: await this.contract.decimals(),
+            symbol: this._tokenSymbol,
+            decimals: this._decimalUnits,
             image: '@/assets/images/logo-mew.svg'
           }
         }
