@@ -21,11 +21,15 @@
         ><SignTypedDataV3
           :from-account="fromAccount"
           :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV4
           :from-account="fromAccount"
           :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
       /></v-col>
       <v-col cols="12" md="4"><EthereumChainInteractions /></v-col>
       <v-col cols="12" md="4"><SendForm /></v-col>
@@ -48,6 +52,7 @@ import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
 import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
+import { ethers } from 'ethers';
 
 import { defineComponent } from 'vue';
 
@@ -56,7 +61,11 @@ export default defineComponent({
   data() {
     return {
       fromAccount: '',
-      isConnected: false
+      isConnected: false,
+      ethereumProvider: {},
+      ethereum: {},
+      networkId: '',
+      chainId: ''
     };
   },
   components: {
@@ -75,7 +84,29 @@ export default defineComponent({
     EthereumChainInteractions,
     SendForm
   },
+  mounted() {
+    this.ethereumProvider = new ethers.providers.Web3Provider(
+      window.ethereum,
+      'any'
+    );
+    this.ethereum = window.ethereum;
+    this.getNewNetwork();
+  },
   methods: {
+    async getNewNetwork() {
+      try {
+        const networkId = await this.ethereum.request({
+          method: 'net_version'
+        });
+        this.networkId = networkId;
+        const chainId = await this.ethereum.request({
+          method: 'eth_chainId'
+        });
+        this.chainId = chainId;
+      } catch (e) {
+        console.error(e);
+      }
+    },
     setFromAccount(account) {
       this.fromAccount = account;
     },

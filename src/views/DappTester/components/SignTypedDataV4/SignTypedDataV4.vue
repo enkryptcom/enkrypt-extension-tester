@@ -40,6 +40,14 @@ export default defineComponent({
     isConnected: {
       type: Boolean,
       default: false
+    },
+    networkId: {
+      type: String,
+      default: () => ''
+    },
+    chainId: {
+      type: String,
+      default: () => ''
     }
   },
   data() {
@@ -49,8 +57,7 @@ export default defineComponent({
       verifiedResults: '',
       isSigned: false,
       isDisabled: false,
-      isVerified: false,
-      networkId: '1'
+      isVerified: false
     };
   },
   mounted() {
@@ -59,25 +66,8 @@ export default defineComponent({
       window.ethereum,
       'any'
     );
-    this.getNewNetwork();
   },
   methods: {
-    async getNewNetwork() {
-      try {
-        const networkId = await this.ethereum.request({
-          method: 'net_version'
-        });
-        this.networkId = networkId;
-        console.log('this.networkId:', this.networkId);
-        const chainId = await this.ethereum.request({
-          method: 'eth_chainId'
-        });
-        this.chainId = chainId;
-        console.log('this.chainId:', this.chainId);
-      } catch (e) {
-        console.error(e);
-      }
-    },
     async signV4() {
       const networkId = this.networkId;
       const chainId = networkId;
