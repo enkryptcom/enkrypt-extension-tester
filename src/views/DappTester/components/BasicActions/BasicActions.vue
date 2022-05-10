@@ -19,10 +19,6 @@ import CustomTextbox from "@/components/CustomTextbox/CustomTextbox.vue";
 import CustomBtn from "@/components/CustomBtn/CustomBtn.vue";
 
 const propsVar = defineProps({
-  ethereum: {
-    type: Object,
-    default: null,
-  },
   handleEIP1559Support: {
     default: () => ({}),
     type: Function,
@@ -36,7 +32,7 @@ let btnText = "Connect";
 let isDisabled = false;
 let chainId = "null";
 let network = "null";
-let ethereum = propsVar.ethereum;
+const ethereum = window.ethereum;
 
 const isMetaMaskConnected = () => {
   return accounts && accounts.length > 0;
