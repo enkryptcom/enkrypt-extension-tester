@@ -113,7 +113,7 @@ export default defineComponent({
           }
         }
       });
-      console.log('result', result);
+      console.log('addToken', result);
     },
     async transferTokensClick() {
       const result = await this.contract.transfer(
@@ -125,7 +125,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log('result', result);
+      console.log('transfer', result);
     },
     async approveTokensClick() {
       const result = await this.contract.approve(
@@ -137,7 +137,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log('result', result);
+      console.log('approve', result);
     },
     async transferTokensWithoutGasClick() {
       const result = await this.contract.transfer(
@@ -147,7 +147,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log('result', result);
+      console.log('transferWithoutGas', result);
     },
     async approveTokensWithoutGasClick() {
       const result = await this.contract.approve(
@@ -157,7 +157,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log('result', result);
+      console.log('approveWithoutGas', result);
     }
   }
 });
