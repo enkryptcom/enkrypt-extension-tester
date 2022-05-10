@@ -19,24 +19,25 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+import { ref } from 'vue';
 
-const propsVar = defineProps({
+const props = defineProps({
   handleEIP1559Support: {
     default: () => ({}),
     type: Function
   }
 });
 
-let accounts = new Array<unknown>();
-let accountsResult = 'null';
-let btnText = 'Connect';
-let isDisabled = false;
-let chainId = 'null';
-let network = 'null';
+let accounts = ref(new Array<unknown>());
+let accountsResult = ref('null');
+let btnText = ref('Connect');
+let isDisabled = ref(false);
+let chainId = ref('null');
+let network = ref('null');
 let ethereum = window.ethereum;
 
 const isMetaMaskConnected = () => {
-  return accounts && accounts.length > 0;
+  return accounts.value && accounts.value.length > 0;
 };
 const onClickConnect = async () => {
   console.log(ethereum);
@@ -54,15 +55,15 @@ const getAccounts = async () => {
     const _accounts = await ethereum.request({
       method: 'eth_accounts'
     });
-    accountsResult = _accounts[0] || 'Not able to get accounts';
+    accountsResult.value = _accounts[0] || 'Not able to get accounts';
   } catch (err) {
     console.log(err);
-    accountsResult = `Error: ${err}`;
+    accountsResult.value = `Error: ${err}`;
   }
 };
 
 const handleNewAccounts = (newAccounts: Array<unknown>) => {
-  accounts = newAccounts;
+  accounts.value = newAccounts;
   if (isMetaMaskConnected()) {
     //initializeAccountButtons();
   }
@@ -70,11 +71,11 @@ const handleNewAccounts = (newAccounts: Array<unknown>) => {
 };
 
 const handleNewChain = (chainID: string) => {
-  chainId = chainID;
+  chainId.value = chainID;
 };
 
 const handleNewNetwork = (networkID: string) => {
-  network = parseInt(networkID).toString();
+  network.value = parseInt(networkID).toString();
 };
 
 const getNetworkAndChainId = async () => {
@@ -88,13 +89,14 @@ const getNetworkAndChainId = async () => {
       method: 'net_version'
     });
     handleNewNetwork(networkId);
-
+    /*
     const block = await ethereum.request({
       method: 'eth_getBlockByNumber',
       params: ['latest', false]
     });
 
-    propsVar.handleEIP1559Support(block.baseFeePerGas !== undefined);
+    props.handleEIP1559Support(block.baseFeePerGas !== undefined);
+    */
   } catch (err) {
     console.error(err);
   }
@@ -102,11 +104,11 @@ const getNetworkAndChainId = async () => {
 
 const updateButtons = () => {
   if (isMetaMaskConnected()) {
-    btnText = 'Connected';
-    isDisabled = true;
+    btnText.value = 'Connected';
+    isDisabled.value = true;
   } else {
-    btnText = 'Connect';
-    isDisabled = false;
+    btnText.value = 'Connect';
+    isDisabled.value = false;
   }
 };
 
