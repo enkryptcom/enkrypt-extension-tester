@@ -56,8 +56,7 @@ export default defineComponent({
       approveDisabled: true,
       transferNoGasDisabled: true,
       approveNoGasDisabled: true,
-      contract: {},
-      hstFactory: {}
+      contract: {}
     };
   },
   methods: {
@@ -73,22 +72,22 @@ export default defineComponent({
           hstBytecode,
           this.ethersSigner as ethers.Signer
         );
-        this.contract = await hstFactory.deploy(
+        const contract = await hstFactory.deploy(
           _initialAmount,
           _tokenName,
           _decimalUnits,
           _tokenSymbol
         );
-        console.log(this.contract);
-        await this.contract.deployTransaction.wait();
-        if (this.contract.address === undefined) {
+        const receipt = await contract.deployTransaction.wait();
+        if (contract.address === undefined) {
           return undefined;
         }
-
+        console.log(receipt);
         console.log(
-          `Contract mined! address: ${this.contract.address} transactionHash: ${this.contract.transactionHash}`
+          `Contract mined! address: ${contract.address} transactionHash: ${receipt.transactionHash}`
         );
-        this.tokenAddress = this.contract.address;
+        this.tokenAddress = contract.address;
+        this.contract = contract;
         this.watchDisabled = false;
         this.transferDisabled = false;
         this.approveDisabled = false;
@@ -108,8 +107,8 @@ export default defineComponent({
           type: 'ERC20',
           options: {
             address: this.tokenAddress,
-            symbol: this.contract.tokenSymbol,
-            decimals: this.contract.decimalUnits,
+            symbol: await this.contract.symbol(),
+            decimals: await this.contract.decimals(),
             image: '@/assets/images/logo-mew.svg'
           }
         }
@@ -138,7 +137,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log(result);
+      console.log('result', result);
     },
     async transferTokensWithoutGasClick() {
       const result = await this.contract.transfer(
@@ -158,7 +157,7 @@ export default defineComponent({
           gasPrice: '20000000000'
         }
       );
-      console.log(result);
+      console.log('result', result);
     }
   }
 });
