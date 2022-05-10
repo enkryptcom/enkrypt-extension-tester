@@ -1,143 +1,131 @@
 <template>
   <CustomCard title="Basic Actions">
-    <div class="font-weight-bold">Network: {{network}}</div>
-    <div class="font-weight-bold">ChainId: {{chainId}}</div>
-    <div class="font-weight-bold">Accounts: {{accounts.length > 0 ? accounts[0] : ''}}</div>
-    <CustomBtn 
-      :disabled="isDisabled"
-      @click="onClickConnect"
-    >
-      {{btnText}}
+    <div class="font-weight-bold">Network: {{ network }}</div>
+    <div class="font-weight-bold">ChainId: {{ chainId }}</div>
+    <div class="font-weight-bold">
+      Accounts: {{ accounts.length > 0 ? accounts[0] : "" }}
+    </div>
+    <CustomBtn :disabled="isDisabled" @click="onClickConnect">
+      {{ btnText }}
     </CustomBtn>
-    <CustomBtn @click="getAccounts">
-      eth_accounts
-    </CustomBtn>
-    <CustomTextbox title="eth_accounts result">{{accountsResult}}</CustomTextbox>
+    <CustomBtn @click="getAccounts"> eth_accounts </CustomBtn>
+    <CustomTextbox title="eth_accounts result">{{ accountsResult }}</CustomTextbox>
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import CustomCard from '@/components/CustomCard/CustomCard.vue';
-import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
-import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+<script setup lang="ts">
+import CustomCard from "@/components/CustomCard/CustomCard.vue";
+import CustomTextbox from "@/components/CustomTextbox/CustomTextbox.vue";
+import CustomBtn from "@/components/CustomBtn/CustomBtn.vue";
 
-export default defineComponent({
-  name: 'BasicActions',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  props: {
-    ethereum: {
-      type: Object,
-      default: null
-    },
-    handleEIP1559Support: {
-      default: function () {
-        return {};
-      },
-      type: Function
-    }
+const propsVar = defineProps({
+  ethereum: {
+    type: Object,
+    default: null,
   },
-  data() {
-      return {
-          accounts: [],
-          accountsResult: 'null',
-          currentUrl: {},
-          btnText: 'Connect',
-          isDisabled: false,
-          chainId: 'null',
-          network: 'null'
-      };
+  handleEIP1559Support: {
+    default: () => ({}),
+    type: Function,
   },
-  watch: {
-    ethereum: {
-      handler: function() {
-        this.initialize();
-      }
-    }
-  },
-  computed: {
-    isMetaMaskConnected() { return this.accounts && this.accounts.length > 0 },
-    forwarderOrigin() { return this.currentUrl.hostname === 'localhost' ? 'http://localhost:9010' : undefined; }
-  },
-  methods: {
-    async onClickConnect() {
-        try {
-            const newAccounts = await this.ethereum.request({
-                method: 'eth_requestAccounts',
-            });
-            this.handleNewAccounts(newAccounts);
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    async getAccounts() {
-      try {
-        const _accounts = await this.ethereum.request({
-          method: 'eth_accounts',
-        });
-        this.accountsResult =
-          _accounts[0] || 'Not able to get accounts';
-      } catch (err) {
-        console.log(err);
-        this.accountsResult = `Error: ${err.message}`;
-      }
-    },
-    // Move to global helper class?
-    handleNewAccounts(newAccounts) {
-      this.accounts = newAccounts;
-      if (this.isMetaMaskConnected) {
-        //initializeAccountButtons();
-      }
-      this.updateButtons();
-    },
-    handleNewChain(chainId) {
-      this.chainId = chainId;
-    },
-    handleNewNetwork(networkId) {
-      this.network = parseInt(networkId);
-    },
-    async getNetworkAndChainId() {
-      try {
-        const chainId = await this.ethereum.request({
-          method: 'eth_chainId',
-        });
-        this.handleNewChain(chainId);
+});
 
-        const networkId = await this.ethereum.request({
-          method: 'net_version',
-        });
-        this.handleNewNetwork(networkId);
-        /*
+let accounts = new Array();
+let accountsResult = "null";
+let currentUrl: URL;
+let btnText = "Connect";
+let isDisabled = false;
+let chainId = "null";
+let network = "null";
+let ethereum = propsVar.ethereum;
+
+const isMetaMaskConnected = () => {
+  return accounts && accounts.length > 0;
+};
+const forwarderOrigin = () => {
+  return currentUrl.hostname === "localhost" ? "http://localhost:9010" : undefined;
+};
+const onClickConnect = async () => {
+  try {
+    const newAccounts = await ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    handleNewAccounts(newAccounts);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getAccounts = async () => {
+  try {
+    const _accounts = await ethereum.request({
+      method: "eth_accounts",
+    });
+    accountsResult = _accounts[0] || "Not able to get accounts";
+  } catch (err: any) {
+    console.log(err);
+    accountsResult = `Error: ${err.message}`;
+  }
+};
+
+const handleNewAccounts = (newAccounts: Array<Object>) => {
+  accounts = newAccounts;
+  if (isMetaMaskConnected()) {
+    //initializeAccountButtons();
+  }
+  updateButtons();
+};
+
+const handleNewChain = (chainID: string) => {
+  chainId = chainID;
+};
+
+const handleNewNetwork = (networkID: string) => {
+  network = parseInt(networkID).toString();
+};
+
+const getNetworkAndChainId = async () => {
+  try {
+    const chain = await ethereum.request({
+      method: "eth_chainId",
+    });
+    handleNewChain(chain);
+
+    const networkId = await ethereum.request({
+      method: "net_version",
+    });
+    handleNewNetwork(networkId);
+    /*
         const block = await this.ethereum.request({
           method: 'eth_getBlockByNumber',
           params: ['latest', false],
         });
-        
+
         this.handleEIP1559Support(block.baseFeePerGas !== undefined);
         */
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    updateButtons() {
-      if (this.isMetaMaskConnected) {
-        this.btnText = 'Connected';
-        this.isDisabled = true;
-      } else {
-        this.btnText = 'Connect';
-        this.isDisabled = false;
-      }
-    },
-    async initialize() {
-      this.ethereum.autoRefreshOnNetworkChange = false;
-      this.getNetworkAndChainId();
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-      this.ethereum.autoRefreshOnNetworkChange = false;
-      this.getNetworkAndChainId();
+const updateButtons = () => {
+  if (isMetaMaskConnected()) {
+    btnText = "Connected";
+    isDisabled = true;
+  } else {
+    btnText = "Connect";
+    isDisabled = false;
+  }
+};
 
-      this.ethereum.on('chainChanged', (chain) => {
-        this.handleNewChain(chain);
-        /*
+const initialize = async () => {
+  ethereum.autoRefreshOnNetworkChange = false;
+  getNetworkAndChainId();
+
+  ethereum.autoRefreshOnNetworkChange = false;
+  getNetworkAndChainId();
+
+  ethereum.on("chainChanged", (chain: string) => {
+    handleNewChain(chain);
+    /*
         this.ethereum
           .request({
             method: 'eth_getBlockByNumber',
@@ -147,10 +135,10 @@ export default defineComponent({
             this.handleEIP1559Support(block.baseFeePerGas !== undefined);
           });
         */
-      });
-      this.ethereum.on('chainChanged', this.handleNewNetwork);
-      this.ethereum.on('accountsChanged', (newAccounts) => {
-        /*
+  });
+  ethereum.on("chainChanged", handleNewNetwork);
+  ethereum.on("accountsChanged", (newAccounts: Array<Object>) => {
+    /*
         this.ethereum
           .request({
             method: 'eth_getBlockByNumber',
@@ -158,21 +146,21 @@ export default defineComponent({
           })
           .then((block) => {
             this.handleEIP1559Support(block.baseFeePerGas !== undefined);
-            
+
           });
           */
-        this.handleNewAccounts(newAccounts);
-      });
+    handleNewAccounts(newAccounts);
+  });
 
-      try {
-        const newAccounts = await this.ethereum.request({
-          method: 'eth_accounts',
-        });
-        this.handleNewAccounts(newAccounts);
-      } catch (err) {
-        console.log('Error on init when getting accounts', err);
-      }
-    }
+  try {
+    const newAccounts = await ethereum.request({
+      method: "eth_accounts",
+    });
+    handleNewAccounts(newAccounts);
+  } catch (err) {
+    console.log("Error on init when getting accounts", err);
   }
-});
+};
+
+initialize();
 </script>
