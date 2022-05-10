@@ -4,7 +4,7 @@
       <v-col cols="12" md="4"
         ><BasicActions :ethereum="ethereum" :setAccounts="setAccounts"
       /></v-col>
-      <v-col cols="12" md="4"><PermissionsActions /></v-col>
+      <v-col cols="12" md="4"><PermissionsActions :ethereum="ethereum" /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"
