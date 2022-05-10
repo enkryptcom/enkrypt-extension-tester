@@ -1,8 +1,15 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions :ethereum="ethereum"/></v-col>
-      <v-col cols="12" md="4"><PermissionsActions :ethereum="ethereum" /></v-col>
+      <v-col cols="12" md="4"
+        ><BasicActions
+          :ethereum="ethereum"
+          @setChainId="setChainId"
+          @setNetworkId="setNetworkId"
+          @setFromAccount="setFromAccount"
+          @setIsConnected="setIsConnected"
+      /></v-col>
+      <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
@@ -10,16 +17,37 @@
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
-      <v-col cols="12" md="4"><SignTypedData /></v-col>
-      <v-col cols="12" md="4"><SignTypedDataV3 /></v-col>
-      <v-col cols="12" md="4"><SignTypedDataV4 /></v-col>
-      <v-col cols="12" md="4"><EthereumChainInteractions /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedData
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedDataV3
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedDataV4
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><EthereumChainInteractions :ethereum="ethereum"
+      /></v-col>
       <v-col cols="12" md="4"><SendForm /></v-col>
     </v-row>
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import BasicActions from './components/BasicActions/BasicActions.vue';
 import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
 import SendEth from './components/SendEth/SendEth.vue';
@@ -34,12 +62,22 @@ import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
 import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
+import { ethers } from 'ethers';
 
 import { defineComponent } from 'vue';
-import { ethers } from 'ethers';
 
 export default defineComponent({
   name: 'DappTester',
+  data() {
+    return {
+      fromAccount: '',
+      isConnected: false,
+      ethersProvider: {},
+      ethereum: {},
+      networkId: '',
+      chainId: ''
+    };
+  },
   components: {
     BasicActions,
     PermissionsActions,
@@ -56,16 +94,41 @@ export default defineComponent({
     EthereumChainInteractions,
     SendForm
   },
-  data(){
-    return{
-      ethersProvider: {},
-      ethereum: {}
-    }
-  },
-  mounted(){
-    // We must specify the network as 'any' for ethers to allow network changes
-    this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+  mounted() {
+    this.ethereumProvider = new ethers.providers.Web3Provider(
+      window.ethereum,
+      'any'
+    );
     this.ethereum = window.ethereum;
+    this.getNewNetwork();
+  },
+  methods: {
+    async getNewNetwork() {
+      try {
+        const networkId = await this.ethereum.request({
+          method: 'net_version'
+        });
+        this.networkId = networkId;
+        const chainId = await this.ethereum.request({
+          method: 'eth_chainId'
+        });
+        this.chainId = chainId;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    setFromAccount(account) {
+      this.fromAccount = account;
+    },
+    setIsConnected(bool) {
+      this.isConnected = bool;
+    },
+    setChainId(id) {
+      this.chainId = id;
+    },
+    setNetworkId(id) {
+      this.networkid = id;
+    }
   }
 });
 </script>
