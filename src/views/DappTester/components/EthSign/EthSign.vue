@@ -7,7 +7,7 @@
       label="Message"
     ></v-text-field>
     <CustomBtn @click="onClickSign">Sign</CustomBtn>
-    <CustomTextbox title="Result">{{ signature }}</CustomTextbox>
+    <CustomTextbox title="Result">{{ ethSignResult }}</CustomTextbox>
   </CustomCard>
 </template>
 
@@ -16,6 +16,8 @@ import { defineComponent } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+
+const ethereum = window.ethereum;
 
 export default defineComponent({
   name: 'ModuleEthSign',
@@ -27,13 +29,39 @@ export default defineComponent({
     }
   },
   data: () => {
-    return { message: 'Hello signer!', signature: '' };
+    return {
+      message:
+        '0x879a053d4800c6354e76c7985a865d2922c82fb5b3f4577b2fe08b998954f2e0',
+      ethSignResult: '',
+      account: ''
+    };
   },
   methods: {
     async onClickSign() {
-      this.signature = await this.signer.signMessage(this.message);
+      try {
+        const ethResult = await ethereum.request({
+          method: 'eth_sign',
+          params: [this.account, this.message]
+        });
+        this.ethSignResult = JSON.stringify(ethResult);
+      } catch (err) {
+        console.error(err);
+        this.ethSignResult = `Error: ${err.message}`;
+      }
+    },
+    async getAccount() {
+      try {
+        const accounts = await ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+        this.account = accounts[0];
+      } catch (e) {
+        console.log(e);
+      }
     }
   },
-  mounted() {}
+  created() {
+    this.getAccount();
+  }
 });
 </script>
