@@ -64,7 +64,10 @@ export default defineComponent({
   },
   mounted() {
     // We must specify the network as 'any' for ethers to allow network changes
-    this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    this.ethersProvider = new ethers.providers.Web3Provider(
+      window.ethereum,
+      'any'
+    );
     this.ethereum = window.ethereum;
   }
 });
