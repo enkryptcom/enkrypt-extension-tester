@@ -3,14 +3,14 @@
     <div class="font-weight-bold">Network: {{ network }}</div>
     <div class="font-weight-bold">ChainId: {{ chainId }}</div>
     <div class="font-weight-bold">
-      Accounts: {{ accounts.length > 0 ? accounts[0] : '' }}
+      Accounts: {{ accounts.list.length > 0 ? accounts.list[0] : '' }}
     </div>
-    <CustomBtn :disabled="isDisabled" @click="onClickConnect">
-      {{ btnText }}
+    <CustomBtn :disabled="button.disabled" @click="onClickConnect">
+      {{ button.text }}
     </CustomBtn>
     <CustomBtn @click="getAccounts"> eth_accounts </CustomBtn>
     <CustomTextbox title="eth_accounts result">{{
-      accountsResult
+      accounts.result
     }}</CustomTextbox>
   </CustomCard>
 </template>
@@ -19,7 +19,7 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 /*
 const props = defineProps({
@@ -30,16 +30,20 @@ const props = defineProps({
 });
 */
 
-let accounts = ref(new Array<unknown>());
-let accountsResult = ref('null');
-let btnText = ref('Connect');
-let isDisabled = ref(false);
-let chainId = ref('null');
-let network = ref('null');
-let ethereum = window.ethereum;
+const accounts = reactive({
+  list: new Array<unknown>(),
+  result: ''
+});
+const button = reactive({
+  disabled: false,
+  text: 'Connect'
+});
+const chainId = ref<string>('');
+const network = ref<string>('');
+const ethereum = window.ethereum;
 
 const isMetaMaskConnected = () => {
-  return accounts.value && accounts.value.length > 0;
+  return accounts.list && accounts.list.length > 0;
 };
 const onClickConnect = async () => {
   try {
@@ -56,15 +60,15 @@ const getAccounts = async () => {
     const _accounts = await ethereum.request({
       method: 'eth_accounts'
     });
-    accountsResult.value = _accounts[0] || 'Not able to get accounts';
+    accounts.result = _accounts[0] || 'Not able to get accounts';
   } catch (err) {
     console.log(err);
-    accountsResult.value = `Error: ${err}`;
+    accounts.result = `Error: ${err}`;
   }
 };
 
 const handleNewAccounts = (newAccounts: Array<unknown>) => {
-  accounts.value = newAccounts;
+  accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
     //initializeAccountButtons();
   }
@@ -105,11 +109,11 @@ const getNetworkAndChainId = async () => {
 
 const updateButtons = () => {
   if (isMetaMaskConnected()) {
-    btnText.value = 'Connected';
-    isDisabled.value = true;
+    button.text = 'Connected';
+    button.disabled = true;
   } else {
-    btnText.value = 'Connect';
-    isDisabled.value = false;
+    button.text = 'Connect';
+    button.disabled = false;
   }
 };
 
