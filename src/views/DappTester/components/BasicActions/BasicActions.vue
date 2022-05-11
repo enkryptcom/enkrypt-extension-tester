@@ -38,6 +38,8 @@ let chainId = ref('null');
 let network = ref('null');
 let ethereum = window.ethereum;
 
+const emits = defineEmits(['setAccounts']);
+
 const isMetaMaskConnected = () => {
   return accounts.value && accounts.value.length > 0;
 };
@@ -66,6 +68,7 @@ const getAccounts = async () => {
 const handleNewAccounts = (newAccounts: Array<unknown>) => {
   accounts.value = newAccounts;
   if (isMetaMaskConnected()) {
+    emits('setAccounts', newAccounts);
     //initializeAccountButtons();
   }
   updateButtons();
