@@ -2,22 +2,22 @@
   <CustomCard title="Send Tokens">
     <div class="font-weight-bold">Token: {{ tokenAddress }}</div>
     <CustomBtn @click="createToken">Create Token</CustomBtn>
-    <CustomBtn :disabled="watchDisabled" @click="watchAssetClick"
+    <CustomBtn :disabled="disabled.watch" @click="watchAssetClick"
       >Add Token to Wallet</CustomBtn
     >
-    <CustomBtn :disabled="transferDisabled" @click="transferTokensClick"
+    <CustomBtn :disabled="disabled.transfer" @click="transferTokensClick"
       >Transfer Tokens</CustomBtn
     >
-    <CustomBtn :disabled="approveDisabled" @click="approveTokensClick"
+    <CustomBtn :disabled="disabled.approve" @click="approveTokensClick"
       >Approve Tokens</CustomBtn
     >
     <CustomBtn
-      :disabled="transferNoGasDisabled"
+      :disabled="disabled.transferNoGas"
       @click="transferTokensWithoutGasClick"
       >Transfer Tokens Without Gas</CustomBtn
     >
     <CustomBtn
-      :disabled="approveNoGasDisabled"
+      :disabled="disabled.approveNoGas"
       @click="approveTokensWithoutGasClick"
       >Approve Tokens Without Gas</CustomBtn
     >
@@ -29,7 +29,7 @@ import { ethers } from 'ethers';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { hstBytecode, hstAbi } from '@/assets/json/constants.json';
-import { ref, type PropType } from 'vue';
+import { reactive, ref, type PropType } from 'vue';
 
 const props = defineProps({
   accounts: {
@@ -46,17 +46,19 @@ const props = defineProps({
   }
 });
 
-let tokenAddress = ref('null');
-let watchDisabled = ref(true);
-let transferDisabled = ref(true);
-let approveDisabled = ref(true);
-let transferNoGasDisabled = ref(true);
-let approveNoGasDisabled = ref(true);
+const tokenAddress = ref<string>('');
+const disabled = reactive({
+  watch: true,
+  transfer: true,
+  approve: true,
+  transferNoGas: true,
+  approveNoGas: true
+});
 let contract = {} as ethers.Contract;
-let _initialAmount = 100;
-let _tokenName = 'TST';
-let _decimalUnits = 4;
-let _tokenSymbol = 'TST';
+const _initialAmount = 100;
+const _tokenName = 'TST';
+const _decimalUnits = 4;
+const _tokenSymbol = 'TST';
 const ethereum = window.ethereum;
 
 async function createToken() {
@@ -82,11 +84,11 @@ async function createToken() {
     );
     tokenAddress.value = Contract.address;
     contract = Contract;
-    watchDisabled.value = false;
-    transferDisabled.value = false;
-    approveDisabled.value = false;
-    transferNoGasDisabled.value = false;
-    approveNoGasDisabled.value = false;
+    disabled.watch = false;
+    disabled.transfer = false;
+    disabled.approve = false;
+    disabled.transferNoGas = false;
+    disabled.approveNoGas = false;
   } catch (error) {
     tokenAddress.value = 'Creation Failed';
     throw error;
