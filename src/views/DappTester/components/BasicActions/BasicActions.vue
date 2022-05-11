@@ -9,7 +9,9 @@
       {{ btnText }}
     </CustomBtn>
     <CustomBtn @click="getAccounts"> eth_accounts </CustomBtn>
-    <CustomTextbox title="eth_accounts result">{{ accountsResult }}</CustomTextbox>
+    <CustomTextbox title="eth_accounts result">{{
+      accountsResult
+    }}</CustomTextbox>
   </CustomCard>
 </template>
 
@@ -19,12 +21,14 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ref } from 'vue';
 
+/*
 const props = defineProps({
   handleEIP1559Support: {
     default: () => ({}),
     type: Function
   }
 });
+*/
 
 let accounts = ref(new Array<unknown>());
 let accountsResult = ref('null');
