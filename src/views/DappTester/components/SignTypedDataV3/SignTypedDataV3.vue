@@ -28,10 +28,10 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { toChecksumAddress } from 'ethereumjs-util';
 import { recoverTypedSignature } from 'eth-sig-util';
 
-let messageData = ref('');
-let verifiedResults = ref('');
-let isSigned = ref(false);
-let isVerified = ref(false);
+const messageData = ref<string>('');
+const verifiedResults = ref<string>('');
+const isSigned = ref<boolean>(false);
+const isVerified = ref<boolean>(false);
 
 const props = defineProps({
   ethereum: {
