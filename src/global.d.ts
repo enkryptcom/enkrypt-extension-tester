@@ -32,11 +32,3 @@ interface ethereum {
   _state: any;
   _warnOfDeprecation: function;
 }
-
-interface PermissionObject {
-  id: string;
-  parentCapability: string;
-  invoker: string;
-  caveats: Array<any>;
-  date: number;
-}

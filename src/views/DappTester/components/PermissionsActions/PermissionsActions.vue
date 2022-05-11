@@ -12,6 +12,7 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+import type { PermissionObject } from './types';
 import { ref } from 'vue';
 
 const ethereum = window.ethereum;
