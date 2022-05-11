@@ -15,7 +15,7 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ref } from 'vue';
 
 const ethereum = window.ethereum;
-let permissionsResult = ref('');
+let permissionsResult = ref<string>('');
 
 const requestPermissions = async () => {
   try {
@@ -44,7 +44,9 @@ const getPermissions = async () => {
   }
 };
 
-const getPermissionsDisplayString = (permissionsArray: Array<any>) => {
+const getPermissionsDisplayString = (
+  permissionsArray: Array<PermissionObject>
+) => {
   if (permissionsArray.length === 0) {
     return 'No permissions found.';
   }
