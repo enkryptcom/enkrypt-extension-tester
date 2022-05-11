@@ -21,20 +21,13 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ref, onMounted } from 'vue';
 
-let accounts = ref(new Array<null>());
-let accountsResult = ref('null');
-let btnText = ref('Connect');
-let isDisabled = ref(false);
-let chainId = ref('null');
-let network = ref('null');
-let ethereum = window.ethereum;
-
-// const props = defineProps({
-//   ethereum: {
-//     type: Object,
-//     default: null
-//   }
-// });
+const accounts = ref(new Array<null>());
+const accountsResult = ref<string>('');
+const btnText = ref<string>('Connect');
+const isDisabled = ref<boolean>(false);
+const chainId = ref<string>('');
+const network = ref<string>('');
+const ethereum = window.ethereum;
 
 onMounted(() => {
   initialize();
@@ -66,16 +59,12 @@ const getAccounts = async () => {
   }
 };
 
-const emits = defineEmits([
-  'setFromAccount',
-  '',
-  'setIsConnected',
-  '',
-  'setChainId',
-  '',
-  'setNeworkId',
-  ''
-]);
+const emits = defineEmits<{
+  (e: 'setFromAccount', address: string): void;
+  (e: 'setIsConnected', bool: boolean): void;
+  (e: 'setChainId', chain: string): void;
+  (e: 'setNeworkId', network: string): void;
+}>();
 
 const handleNewAccounts = newAccounts => {
   accounts.value = newAccounts;
