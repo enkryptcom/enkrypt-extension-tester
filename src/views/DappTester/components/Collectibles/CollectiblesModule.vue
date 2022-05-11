@@ -19,7 +19,7 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { defineProps, reactive } from 'vue';
+import { reactive } from 'vue';
 
 import { ethers } from 'ethers';
 import {
