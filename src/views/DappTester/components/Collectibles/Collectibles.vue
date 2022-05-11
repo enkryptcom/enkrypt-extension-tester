@@ -2,22 +2,24 @@
   <CustomCard title="Collectibles">
     <v-text-field
       hide-details
-      v-model="amount"
+      v-model="collectibles.amount"
       variant="outlined"
       label="Amount"
-      :disabled="mintAmountDisabled"
+      :disabled="disabled.amount"
     ></v-text-field>
     <CustomBtn @click="deployClick">Deploy</CustomBtn>
-    <CustomBtn @click="mintClick" :disabled="mintDisabled">Mint</CustomBtn>
-    <CustomTextbox title="Collectibles">{{collectiblesStatus}}</CustomTextbox>
+    <CustomBtn @click="mintClick" :disabled="disabled.mint">Mint</CustomBtn>
+    <CustomTextbox title="Collectibles">{{
+      collectibles.status
+    }}</CustomTextbox>
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+import { defineProps, reactive } from 'vue';
 
 import { ethers } from 'ethers';
 import {
@@ -25,68 +27,65 @@ import {
   collectiblesBytecode
 } from '@/assets/json/constants.json';
 
-export default defineComponent({
-  name: 'ModuleCollectibles',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  props:{
-    ethersSigner: {
-      type: Object,
-      default: null
-    },
-    accounts: {
-      type: Array,
-      default: []
-    }
+const props = defineProps({
+  ethersSigner: {
+    type: Object,
+    required: true
   },
-  data: () => {
-    return { 
-      amount: 1,
-      collectiblesStatus: '',
-      mintDisabled: true,
-      mintAmountDisabled: true,
-      contract: {}
-    };
-  },
-  methods:{
-    async deployClick() {
-      let contract;
-      let receipt;
-      this.collectiblesStatus = 'Deploying';
-
-    const collectiblesFactory = new ethers.ContractFactory(
-      collectiblesAbi,
-      collectiblesBytecode,
-      this.ethersSigner
-    );
-    
-
-      try {
-        contract = await collectiblesFactory.deploy();
-        receipt = await contract.deployTransaction.wait();
-      } catch (error) {
-        this.collectiblesStatus = 'Deployment Failed';
-        throw error;
-      }
-      if (contract.address === undefined) {
-        return;
-      }
-      console.log(
-        `Contract mined! address: ${contract.address} transactionHash: ${receipt.transactionHash}`,
-      );
-      this.contract = contract;
-      this.collectiblesStatus = 'Deployed';
-      this.mintDisabled = false;
-      this.mintAmountDisabled = false;
-    },
-    async mintClick() {
-      this.collectiblesStatus = 'Mint initiated';
-      let result = await this.contract.mintCollectibles(this.amount, {
-        from: this.accounts[0],
-      });
-      result = await result.wait();
-      console.log(result);
-      this.collectiblesStatus = 'Mint completed';
+  accounts: {
+    type: Array,
+    default: () => {
+      return [];
     }
   }
 });
+const collectibles = reactive({
+  amount: 1,
+  status: ''
+});
+const disabled = reactive({
+  mint: true,
+  amount: true
+});
+let contract = {} as ethers.Contract;
+
+async function deployClick() {
+  let Contract;
+  let receipt;
+  collectibles.status = 'Deploying';
+
+  const collectiblesFactory = new ethers.ContractFactory(
+    collectiblesAbi,
+    collectiblesBytecode,
+    props.ethersSigner as ethers.Signer
+  );
+
+  try {
+    Contract = await collectiblesFactory.deploy();
+    receipt = await Contract.deployTransaction.wait();
+  } catch (error) {
+    collectibles.status = 'Deployment Failed';
+    throw error;
+  }
+  if (Contract.address === undefined) {
+    return;
+  }
+  console.log(
+    `Contract mined! address: ${Contract.address} transactionHash: ${receipt.transactionHash}`
+  );
+  contract = Contract;
+  collectibles.status = 'Deployed';
+  disabled.mint = false;
+  disabled.amount = false;
+}
+
+async function mintClick() {
+  collectibles.status = 'Mint initiated';
+  let result = await contract.mintCollectibles(collectibles.amount, {
+    from: props.accounts[0]
+  });
+  result = await result.wait();
+  console.log(result);
+  collectibles.status = 'Mint completed';
+}
 </script>
