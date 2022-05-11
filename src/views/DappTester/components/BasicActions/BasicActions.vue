@@ -38,8 +38,8 @@ const button = reactive({
   disabled: false,
   text: 'Connect'
 });
-const chainId = ref('');
-const network = ref('');
+const chainId = ref<string>('');
+const network = ref<string>('');
 const ethereum = window.ethereum;
 
 const isMetaMaskConnected = () => {
