@@ -1,59 +1,114 @@
 <template>
   <CustomCard title="Personal Sign">
-    <v-text-field
-      hide-details
-      v-model="message"
-      variant="outlined"
-      label="Message"
-    ></v-text-field>
+    <CustomBtn @click="onclickPersonalSign">Sign</CustomBtn>
 
-    <CustomBtn @click="onClickSign">Sign</CustomBtn>
-    <CustomTextbox title="Result">
-      <div>Message: {{ message }}</div>
-      <div>Signature: {{ signature }}</div>
-    </CustomTextbox>
+    <CustomTextbox title="Result">{{ personalSignResult }} </CustomTextbox>
 
     <v-divider class="my-12"></v-divider>
 
-    <CustomBtn :disabled="!message || !signature" @click="verify">
+    <CustomBtn
+      :disabled="disablePersonalSignVerify"
+      @click="onclickPersonalSignVerify"
+    >
       Verify
     </CustomBtn>
-    <CustomTextbox title="eth-sig-util recovery result">{{
-      address
-    }}</CustomTextbox>
 
-    <!--
-    <CustomTextbox title="personal_ecRecover result">null</CustomTextbox>
-    -->
+    <CustomTextbox title="eth-sig-util recovery result">
+      {{ personalSignVerifySigUtilResult }}
+    </CustomTextbox>
+
+    <CustomTextbox title="personal_ecRecover result">
+      {{ personalSignVerifyECRecoverResult }}
+    </CustomTextbox>
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { ethers } from 'ethers';
+import { recoverPersonalSignature } from 'eth-sig-util';
 
-export default defineComponent({
-  name: 'ModulePersonalSign',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  props: {
-    signer: {
-      type: Object,
-      default: null
-    }
-  },
-  data: () => {
-    return { message: 'Hello signer!', signature: '', address: '' };
-  },
-  methods: {
-    async onClickSign() {
-      this.signature = await this.signer.signMessage(this.message);
-    },
-    verify() {
-      this.address = ethers.utils.verifyMessage(this.message, this.signature);
-    }
+const ethereum = window.ethereum;
+
+let account = '';
+let personalSignResult = ref('');
+let disablePersonalSignVerify = ref(true);
+let personalSignVerifySigUtilResult = ref('');
+let personalSignVerifyECRecoverResult = ref('');
+
+/**
+ * Personal Sign
+ */
+const onclickPersonalSign = async () => {
+  const exampleMessage = 'Example `personal_sign` message';
+  try {
+    const from = account;
+    const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
+    const sign = await ethereum.request({
+      method: 'personal_sign',
+      params: [msg, from, 'Example password']
+    });
+    personalSignResult.value = sign;
+    disablePersonalSignVerify.value = false;
+  } catch (err) {
+    console.error(err);
+    personalSignResult.value = `Error: ${err.message}`;
   }
-});
+};
+
+/**
+ * Personal Sign Verify
+ */
+const onclickPersonalSignVerify = async () => {
+  const exampleMessage = 'Example `personal_sign` message';
+  try {
+    const from = account;
+    const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
+    const sign = personalSignResult.value;
+    const recoveredAddr = recoverPersonalSignature({
+      data: msg,
+      sig: sign
+    });
+    if (recoveredAddr === from) {
+      console.log(`SigUtil Successfully verified signer as ${recoveredAddr}`);
+      personalSignVerifySigUtilResult.value = recoveredAddr;
+    } else {
+      console.log(
+        `SigUtil Failed to verify signer when comparing ${recoveredAddr} to ${from}`
+      );
+      console.log(`Failed comparing ${recoveredAddr} to ${from}`);
+    }
+    const ecRecoverAddr = await ethereum.request({
+      method: 'personal_ecRecover',
+      params: [msg, sign]
+    });
+    if (ecRecoverAddr === from) {
+      console.log(`Successfully ecRecovered signer as ${ecRecoverAddr}`);
+      personalSignVerifyECRecoverResult.value = ecRecoverAddr;
+    } else {
+      console.log(
+        `Failed to verify signer when comparing ${ecRecoverAddr} to ${from}`
+      );
+    }
+  } catch (err) {
+    console.error(err);
+    personalSignVerifySigUtilResult.value = `Error: ${err.message}`;
+    personalSignVerifyECRecoverResult.value = `Error: ${err.message}`;
+  }
+};
+
+const getAccount = async () => {
+  try {
+    const accounts = await ethereum.request({
+      method: 'eth_requestAccounts'
+    });
+    account = accounts[0];
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+getAccount();
 </script>
