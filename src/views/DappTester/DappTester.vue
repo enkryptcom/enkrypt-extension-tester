@@ -1,10 +1,8 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"
-        ><BasicActions :ethereum="ethereum" :setAccounts="setAccounts"
-      /></v-col>
-      <v-col cols="12" md="4"><PermissionsActions :ethereum="ethereum" /></v-col>
+      <v-col cols="12" md="4"><BasicActions /></v-col>
+      <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"
@@ -68,9 +66,9 @@ export default defineComponent({
   },
   data() {
     return {
-      ethersProvider: {},
+      ethersProvider: {} as ethers.providers.Web3Provider,
       ethereum: {},
-      accounts: [],
+      accounts: new Array<unknown>(),
       ethersSigner: {}
     };
   },
@@ -84,7 +82,7 @@ export default defineComponent({
     this.ethersSigner = this.ethersProvider.getSigner();
   },
   methods: {
-    setAccounts(accounts) {
+    setAccounts(accounts: Array<unknown>) {
       this.accounts = accounts;
     }
   }
