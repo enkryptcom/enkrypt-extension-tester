@@ -46,7 +46,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import BasicActions from './components/BasicActions/BasicActions.vue';
 import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
@@ -95,38 +94,43 @@ export default defineComponent({
     SendForm
   },
   mounted() {
-    this.ethereumProvider = new ethers.providers.Web3Provider(
+    // We must specify the network as 'any' for ethers to allow network changes
+    this.ethersProvider = new ethers.providers.Web3Provider(
       window.ethereum,
       'any'
     );
     this.ethereum = window.ethereum;
-    this.getNewNetwork();
+    // this.getNewNetwork();
   },
   methods: {
-    async getNewNetwork() {
-      try {
-        const networkId = await this.ethereum.request({
-          method: 'net_version'
-        });
-        this.networkId = networkId;
-        const chainId = await this.ethereum.request({
-          method: 'eth_chainId'
-        });
-        this.chainId = chainId;
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    // async getNewNetwork() {
+    //   try {
+    //     const networkId = await this.ethereum.request({
+    //       method: 'net_version'
+    //     });
+    //     this.networkId = networkId;
+    //     const chainId = await this.ethereum.request({
+    //       method: 'eth_chainId'
+    //     });
+    //     this.chainId = chainId;
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
     setFromAccount(account) {
+      // console.log('setFromAccount emitted and received', account);
       this.fromAccount = account;
     },
     setIsConnected(bool) {
+      // console.log('setIsConncted emitted and received', bool);
       this.isConnected = bool;
     },
     setChainId(id) {
+      // console.log('setChainId emitted and received', id);
       this.chainId = id;
     },
     setNetworkId(id) {
+      // console.log('setNetworkId emitted and received', id);
       this.networkid = id;
     }
   }
