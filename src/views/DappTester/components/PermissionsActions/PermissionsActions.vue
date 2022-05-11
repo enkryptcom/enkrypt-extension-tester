@@ -25,8 +25,9 @@ const requestPermissions = async () => {
     });
     permissionsResult.value = getPermissionsDisplayString(permissionsArray);
   } catch (err) {
+    const error = err as Error;
     console.log(err);
-    permissionsResult.value = `Error: ${err}`;
+    permissionsResult.value = `Error: ${error.message}`;
   }
 };
 
@@ -35,10 +36,11 @@ const getPermissions = async () => {
     const permissionsArray = await ethereum.request({
       method: 'wallet_getPermissions'
     });
-    permissionsResult = getPermissionsDisplayString(permissionsArray);
+    permissionsResult.value = getPermissionsDisplayString(permissionsArray);
   } catch (err) {
+    const error = err as Error;
     console.log(err);
-    permissionsResult.value = `Error: ${err}`;
+    permissionsResult.value = `Error: ${error.message}`;
   }
 };
 
@@ -47,7 +49,6 @@ const getPermissionsDisplayString = (permissionsArray: Array<any>) => {
     return 'No permissions found.';
   }
   const permissionNames = permissionsArray.map(perm => perm.parentCapability);
-  console.log(permissionsArray);
   return permissionNames
     .reduce((acc, name) => `${acc}${name}, `, '')
     .replace(/, $/u, '');
