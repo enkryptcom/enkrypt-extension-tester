@@ -21,20 +21,13 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ref, onMounted } from 'vue';
 
-const accounts = ref(new Array<null>());
+const accounts = ref<string[]>([]);
 const accountsResult = ref<string>('');
 const btnText = ref<string>('Connect');
 const isDisabled = ref<boolean>(false);
 const chainId = ref<string>('');
 const network = ref<string>('');
 const ethereum = window.ethereum;
-
-// const props = defineProps({
-//   ethereum: {
-//     type: Object,
-//     default: null
-//   }
-// });
 
 onMounted(() => {
   initialize();
@@ -48,10 +41,9 @@ const onClickConnect = async () => {
     const newAccounts = await ethereum.request({
       method: 'eth_requestAccounts'
     });
-    console.log('onClickConnect newAccounts:', newAccounts.toString());
     handleNewAccounts(newAccounts);
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 const getAccounts = async () => {
@@ -61,7 +53,6 @@ const getAccounts = async () => {
     });
     accountsResult.value = _accounts[0] || 'Not able to get accounts';
   } catch (err) {
-    console.log(err);
     accountsResult.value = `Error: ${err}`;
   }
 };
@@ -78,8 +69,6 @@ const handleNewAccounts = newAccounts => {
   if (isMetaMaskConnected()) {
     emits('setFromAccount', accounts.value.toString());
     emits('setIsConnected', true);
-    console.log(`accountEmit has been triggered!`);
-    //initializeAccountButtons();
   }
   updateButtons();
 };
@@ -89,7 +78,7 @@ const handleNewChain = (chainID: string) => {
 };
 
 const handleNewNetwork = (networkID: string) => {
-  network.value = parseInt(networkID).toString();
+  network.value === networkID;
 };
 
 const getNetworkAndChainId = async () => {
@@ -99,24 +88,15 @@ const getNetworkAndChainId = async () => {
     });
     handleNewChain(chain);
     chainId.value = chain;
-    emits('setChainId', chainId.value.toString());
+    emits('setChainId', chainId.value);
     const networkId = await ethereum.request({
       method: 'net_version'
     });
     handleNewNetwork(networkId);
     network.value = networkId;
     emits('setNeworkId', network.value.toString());
-
-    /*
-    const block = await ethereum.request({
-      method: 'eth_getBlockByNumber',
-      params: ['latest', false]
-    });
-
-    props.handleEIP1559Support(block.baseFeePerGas !== undefined);
-    */
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 
@@ -139,29 +119,9 @@ const initialize = async () => {
 
   ethereum.on('chainChanged', (chain: string) => {
     handleNewChain(chain);
-    /*
-    ethereum
-      .request({
-        method: 'eth_getBlockByNumber',
-        params: ['latest', false]
-      })
-      .then((block: { baseFeePerGas: undefined }) => {
-        propsVar.handleEIP1559Support(block.baseFeePerGas !== undefined);
-      });
-      */
   });
   ethereum.on('chainChanged', handleNewNetwork);
-  ethereum.on('accountsChanged', (newAccounts: Array<unknown>) => {
-    /*
-    ethereum
-      .request({
-        method: 'eth_getBlockByNumber',
-        params: ['latest', false]
-      })
-      .then((block: { baseFeePerGas: undefined }) => {
-        propsVar.handleEIP1559Support(block.baseFeePerGas !== undefined);
-      });
-    */
+  ethereum.on('accountsChanged', (newAccounts: Array<string[]>) => {
     handleNewAccounts(newAccounts);
   });
 
@@ -171,7 +131,7 @@ const initialize = async () => {
     });
     handleNewAccounts(newAccounts);
   } catch (err) {
-    console.error('Error on init when getting accounts', err);
+    return err;
   }
 };
 </script>
