@@ -26,7 +26,10 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { toChecksumAddress } from 'ethereumjs-util';
-import { recoverTypedSignature_v4 as recoverTypedSignatureV4 } from 'eth-sig-util';
+import {
+  recoverTypedSignature,
+  SignTypedDataVersion
+} from '@metamask/eth-sig-util';
 
 const messageData = ref<string>('');
 const verifiedResults = ref<string>('');
@@ -181,12 +184,14 @@ const verify = async () => {
       ]
     }
   };
+
   try {
     const from = props.fromAccount;
     const signature = messageData.value;
-    const recoveredAddr = recoverTypedSignatureV4({
-      data: msgParams,
-      sig: signature
+    const recoveredAddr = recoverTypedSignature({
+      data: msgParams as never,
+      signature,
+      version: SignTypedDataVersion.V4
     });
     if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
       console.log(`Successfully verified signer as ${recoveredAddr}`);

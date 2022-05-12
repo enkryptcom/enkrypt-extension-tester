@@ -29,6 +29,13 @@ const chainId = ref<string>('');
 const network = ref<string>('');
 const ethereum = window.ethereum;
 
+// const props = defineProps({
+//   ethereum: {
+//     type: Object,
+//     default: null
+//   }
+// });
+
 onMounted(() => {
   initialize();
 });
