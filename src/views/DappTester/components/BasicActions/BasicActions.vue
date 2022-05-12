@@ -34,6 +34,10 @@ const chainId = ref<string>('');
 const network = ref<string>('');
 const ethereum = window.ethereum;
 
+const emits = defineEmits<{
+  (e: 'setAccounts', newAccounts: string[]): void;
+}>();
+
 const isMetaMaskConnected = () => {
   return accounts.list && accounts.list.length > 0;
 };
@@ -62,7 +66,7 @@ const getAccounts = async () => {
 const handleNewAccounts = (newAccounts: string[]) => {
   accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
-    // Connected to metamask
+    emits('setAccounts', newAccounts);
   }
   updateButtons();
 };

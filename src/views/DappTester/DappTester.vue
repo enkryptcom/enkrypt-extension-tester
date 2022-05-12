@@ -1,15 +1,14 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions /></v-col>
+      <v-col cols="12" md="4"
+        ><BasicActions @set-accounts="setAccounts"
+      /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"
-        ><SendTokens
-          :ethereum="ethereum"
-          :accounts="accounts"
-          :ethers-signer="ethersSigner"
+        ><SendTokens :accounts="accounts" :ethers-signer="ethersSigner"
       /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
       <v-col cols="12" md="4"
