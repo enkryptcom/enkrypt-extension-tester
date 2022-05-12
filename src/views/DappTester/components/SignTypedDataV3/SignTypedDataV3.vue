@@ -42,14 +42,14 @@ const props = defineProps({
     default: null
   },
   handleEIP1559Support: {
-    default: function () {
+    default: () => {
       return {};
     },
     type: Function
   },
   fromAccount: {
     type: String,
-    default: () => ''
+    default: ''
   },
   isConnected: {
     type: Boolean,
@@ -57,55 +57,55 @@ const props = defineProps({
   },
   networkId: {
     type: String,
-    default: () => ''
+    default: ''
   },
   chainId: {
     type: String,
-    default: () => ''
+    default: ''
   }
 });
 
+const chainId = props.chainId || props.networkId;
+
+const msgParams = {
+  types: {
+    EIP712Domain: [
+      { name: 'name', type: 'string' },
+      { name: 'version', type: 'string' },
+      { name: 'chainId', type: 'uint256' },
+      { name: 'verifyingContract', type: 'address' }
+    ],
+    Person: [
+      { name: 'name', type: 'string' },
+      { name: 'wallet', type: 'address' }
+    ],
+    Mail: [
+      { name: 'from', type: 'Person' },
+      { name: 'to', type: 'Person' },
+      { name: 'contents', type: 'string' }
+    ]
+  },
+  primaryType: 'Mail',
+  domain: {
+    name: 'Ether Mail',
+    version: '1',
+    chainId,
+    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+  },
+  message: {
+    from: {
+      name: 'Cow',
+      wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
+    },
+    to: {
+      name: 'Bob',
+      wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
+    },
+    contents: 'Hello, Bob!'
+  }
+};
+
 const signV3 = async () => {
-  const networkId = props.networkId;
-  const chainId = props.chainId || networkId;
-  console.log('networkId inside of V3:', networkId);
-  const msgParams = {
-    types: {
-      EIP712Domain: [
-        { name: 'name', type: 'string' },
-        { name: 'version', type: 'string' },
-        { name: 'chainId', type: 'uint256' },
-        { name: 'verifyingContract', type: 'address' }
-      ],
-      Person: [
-        { name: 'name', type: 'string' },
-        { name: 'wallet', type: 'address' }
-      ],
-      Mail: [
-        { name: 'from', type: 'Person' },
-        { name: 'to', type: 'Person' },
-        { name: 'contents', type: 'string' }
-      ]
-    },
-    primaryType: 'Mail',
-    domain: {
-      name: 'Ether Mail',
-      version: '1',
-      chainId,
-      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
-    },
-    message: {
-      from: {
-        name: 'Cow',
-        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
-      },
-      to: {
-        name: 'Bob',
-        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
-      },
-      contents: 'Hello, Bob!'
-    }
-  };
   try {
     const from = props.fromAccount;
     const signedData = await props.ethereum.request({
@@ -114,52 +114,12 @@ const signV3 = async () => {
     });
     messageData.value = signedData;
     isSigned.value = true;
-    console.log('V3 signedData:', signedData);
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 
 const verify = async () => {
-  const networkId = props.networkId;
-  const chainId = props.chainId || networkId;
-  const msgParams = {
-    types: {
-      EIP712Domain: [
-        { name: 'name', type: 'string' },
-        { name: 'version', type: 'string' },
-        { name: 'chainId', type: 'uint256' },
-        { name: 'verifyingContract', type: 'address' }
-      ],
-      Person: [
-        { name: 'name', type: 'string' },
-        { name: 'wallet', type: 'address' }
-      ],
-      Mail: [
-        { name: 'from', type: 'Person' },
-        { name: 'to', type: 'Person' },
-        { name: 'contents', type: 'string' }
-      ]
-    },
-    primaryType: 'Mail',
-    domain: {
-      name: 'Ether Mail',
-      version: '1',
-      chainId,
-      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
-    },
-    message: {
-      from: {
-        name: 'Cow',
-        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'
-      },
-      to: {
-        name: 'Bob',
-        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'
-      },
-      contents: 'Hello, Bob!'
-    }
-  };
   try {
     const from = props.fromAccount;
     const signature = messageData.value;
@@ -169,16 +129,11 @@ const verify = async () => {
       version: SignTypedDataVersion.V3
     });
     if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
-      console.log(`Successfully verified signer as ${recoveredAddr}`);
       verifiedResults.value = recoveredAddr;
       isVerified.value = true;
-    } else {
-      console.log(
-        `Failed to verify signer when comparing ${recoveredAddr} to ${from}`
-      );
     }
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 </script>

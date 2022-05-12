@@ -40,14 +40,14 @@ const props = defineProps({
     default: null
   },
   handleEIP1559Support: {
-    default: function () {
+    default: () => {
       return {};
     },
     type: Function
   },
   fromAccount: {
     type: String,
-    default: () => ''
+    default: ''
   },
   isConnected: {
     type: Boolean,
@@ -56,7 +56,6 @@ const props = defineProps({
 });
 
 const signV1 = async () => {
-  console.log('sign:', props.fromAccount);
   const msgParams = [
     {
       type: 'string',
@@ -77,13 +76,11 @@ const signV1 = async () => {
     });
     messageData.value = signedData;
     isSigned.value = true;
-    console.log('V1 signedData:', messageData.value);
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 const verify = async () => {
-  console.log('verify in V1 has been triggered!');
   const msgParams = [
     {
       type: 'string',
@@ -105,16 +102,11 @@ const verify = async () => {
       version: SignTypedDataVersion.V1
     });
     if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
-      console.log(`Successfully verified signer as ${recoveredAddr}`);
       verifiedResults.value = recoveredAddr;
       isVerified.value = true;
-    } else {
-      console.error(
-        `Failed to verify signer when comparing ${recoveredAddr} to ${from}`
-      );
     }
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 </script>

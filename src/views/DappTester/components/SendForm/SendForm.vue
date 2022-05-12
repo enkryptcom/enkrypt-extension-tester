@@ -85,14 +85,14 @@ const props = defineProps({
     default: null
   },
   handleEIP1559Support: {
-    default: function () {
+    default: () => {
       return {};
     },
     type: Function
   },
   fromAccount: {
     type: String,
-    default: () => ''
+    default: ''
   },
   isConnected: {
     type: Boolean,
@@ -101,7 +101,7 @@ const props = defineProps({
 });
 
 const send = async () => {
-  const result = await props.ethereum.request({
+  await props.ethereum.request({
     method: 'eth_sendTransaction',
     params: [
       {
@@ -114,6 +114,5 @@ const send = async () => {
       }
     ]
   });
-  console.log('send result:', result);
 };
 </script>
