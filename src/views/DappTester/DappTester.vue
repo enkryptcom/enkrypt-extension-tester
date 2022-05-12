@@ -11,7 +11,9 @@
         ><SendTokens :accounts="accounts" :ethers-signer="ethersSigner"
       /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
-      <v-col cols="12" md="4"><Collectibles /></v-col>
+      <v-col cols="12" md="4"
+        ><CollectiblesModule :ethersSigner="ethersSigner" :accounts="accounts"
+      /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
@@ -31,7 +33,7 @@ import SendEth from './components/SendEth/SendEth.vue';
 import Contract from './components/Contract/Contract.vue';
 import FailingContract from './components/FailingContract/FailingContract.vue';
 import SendTokens from './components/SendTokens/SendTokens.vue';
-import Collectibles from './components/Collectibles/Collectibles.vue';
+import CollectiblesModule from './components/Collectibles/CollectiblesModule.vue';
 import EncryptDecrypt from './components/EncryptDecrypt/EncryptDecrypt.vue';
 import EthSign from './components/EthSign/EthSign.vue';
 import PersonalSign from './components/PersonalSign/PersonalSign.vue';
@@ -53,7 +55,7 @@ export default defineComponent({
     SendTokens,
     Contract,
     FailingContract,
-    Collectibles,
+    CollectiblesModule,
     EncryptDecrypt,
     EthSign,
     PersonalSign,
