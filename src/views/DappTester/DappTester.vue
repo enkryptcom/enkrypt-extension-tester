@@ -67,7 +67,7 @@ export default defineComponent({
     return {
       ethersProvider: {} as ethers.providers.Web3Provider,
       ethereum: {},
-      accounts: new Array<unknown>(),
+      accounts: new Array<string>(),
       ethersSigner: {} as ethers.Signer
     };
   },
@@ -81,7 +81,7 @@ export default defineComponent({
     this.ethersSigner = this.ethersProvider.getSigner();
   },
   methods: {
-    setAccounts(accounts: Array<unknown>) {
+    setAccounts(accounts: Array<string>) {
       this.accounts = accounts;
     }
   }
