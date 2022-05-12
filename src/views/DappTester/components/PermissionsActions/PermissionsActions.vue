@@ -27,7 +27,6 @@ const requestPermissions = async () => {
     permissionsResult.value = getPermissionsDisplayString(permissionsArray);
   } catch (err) {
     const error = err as Error;
-    console.log(err);
     permissionsResult.value = `Error: ${error.message}`;
   }
 };
@@ -40,7 +39,6 @@ const getPermissions = async () => {
     permissionsResult.value = getPermissionsDisplayString(permissionsArray);
   } catch (err) {
     const error = err as Error;
-    console.log(err);
     permissionsResult.value = `Error: ${error.message}`;
   }
 };
