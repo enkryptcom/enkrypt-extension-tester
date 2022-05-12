@@ -8,65 +8,50 @@
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+import type { PermissionObject } from './types';
+import { ref } from 'vue';
 
-export default defineComponent({
-  name: 'ModulePermissionsActions',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  props: {
-    ethereum: {
-      type: Object,
-      default: null
-    }
-  },
-  data() {
-    return {
-      permissionsResult: ''
-    };
-  },
-  methods: {
-    async requestPermissions() {
-      try {
-        const permissionsArray = await this.ethereum.request({
-          method: 'wallet_requestPermissions',
-          params: [{ eth_accounts: {} }]
-        });
-        this.permissionsResult =
-          this.getPermissionsDisplayString(permissionsArray);
-      } catch (err) {
-        const error = err as Error;
-        console.log(err);
-        this.permissionsResult = `Error: ${error.message}`;
-      }
-    },
-    async getPermissions() {
-      try {
-        const permissionsArray = await this.ethereum.request({
-          method: 'wallet_getPermissions'
-        });
-        this.permissionsResult =
-          this.getPermissionsDisplayString(permissionsArray);
-      } catch (err) {
-        const error = err as Error;
-        console.log(err);
-        this.permissionsResult = `Error: ${error.message}`;
-      }
-    },
-    getPermissionsDisplayString(permissionsArray: Array<any>) {
-      if (permissionsArray.length === 0) {
-        return 'No permissions found.';
-      }
-      const permissionNames = permissionsArray.map(
-        perm => perm.parentCapability
-      );
-      return permissionNames
-        .reduce((acc, name) => `${acc}${name}, `, '')
-        .replace(/, $/u, '');
-    }
+const ethereum = window.ethereum;
+let permissionsResult = ref<string>('');
+
+const requestPermissions = async () => {
+  try {
+    const permissionsArray = await ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [{ eth_accounts: {} }]
+    });
+    permissionsResult.value = getPermissionsDisplayString(permissionsArray);
+  } catch (err) {
+    const error = err as Error;
+    permissionsResult.value = `Error: ${error.message}`;
   }
-});
+};
+
+const getPermissions = async () => {
+  try {
+    const permissionsArray = await ethereum.request({
+      method: 'wallet_getPermissions'
+    });
+    permissionsResult.value = getPermissionsDisplayString(permissionsArray);
+  } catch (err) {
+    const error = err as Error;
+    permissionsResult.value = `Error: ${error.message}`;
+  }
+};
+
+const getPermissionsDisplayString = (
+  permissionsArray: Array<PermissionObject>
+) => {
+  if (permissionsArray.length === 0) {
+    return 'No permissions found.';
+  }
+  const permissionNames = permissionsArray.map(perm => perm.parentCapability);
+  return permissionNames
+    .reduce((acc, name) => `${acc}${name}, `, '')
+    .replace(/, $/u, '');
+};
 </script>
