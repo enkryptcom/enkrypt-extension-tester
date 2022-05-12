@@ -30,24 +30,21 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { hstBytecode, hstAbi } from '@/assets/json/constants.json';
 import { reactive, ref, type PropType } from 'vue';
+import type { TypeDisabled } from './types';
 
 const props = defineProps({
   accounts: {
-    type: Array,
-    default: () => {
-      return {};
-    }
+    type: Array as PropType<string[]>,
+    default: () => []
   },
   ethersSigner: {
     type: Object as PropType<ethers.Signer>,
-    default: () => {
-      return {};
-    }
+    default: () => ({})
   }
 });
 
 const tokenAddress = ref<string>('');
-const disabled = reactive({
+const disabled: TypeDisabled = reactive({
   watch: true,
   transfer: true,
   approve: true,
