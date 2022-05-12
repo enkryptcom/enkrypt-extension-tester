@@ -2,7 +2,9 @@
   <CustomCard title="Permissions Actions">
     <CustomBtn @click="requestPermissions">Request Permissions</CustomBtn>
     <CustomBtn @click="getPermissions">Get Permissions</CustomBtn>
-    <CustomTextbox title="Permissions result">{{permissionsResult}}</CustomTextbox>
+    <CustomTextbox title="Permissions result">{{
+      permissionsResult
+    }}</CustomTextbox>
   </CustomCard>
 </template>
 
@@ -15,48 +17,52 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 export default defineComponent({
   name: 'ModulePermissionsActions',
   components: { CustomCard, CustomTextbox, CustomBtn },
-  props:{
-    ethereum:{
+  props: {
+    ethereum: {
       type: Object,
       default: null
     }
   },
-  data(){
+  data() {
     return {
       permissionsResult: ''
-    }
+    };
   },
-  methods:{
+  methods: {
     async requestPermissions() {
       try {
         const permissionsArray = await this.ethereum.request({
           method: 'wallet_requestPermissions',
-          params: [{ eth_accounts: {} }],
+          params: [{ eth_accounts: {} }]
         });
         this.permissionsResult =
           this.getPermissionsDisplayString(permissionsArray);
       } catch (err) {
+        const error = err as Error;
         console.log(err);
-        this.permissionsResult = `Error: ${err.message}`;
+        this.permissionsResult = `Error: ${error.message}`;
       }
     },
     async getPermissions() {
       try {
         const permissionsArray = await this.ethereum.request({
-          method: 'wallet_getPermissions',
+          method: 'wallet_getPermissions'
         });
         this.permissionsResult =
           this.getPermissionsDisplayString(permissionsArray);
       } catch (err) {
+        const error = err as Error;
         console.log(err);
-        this.permissionsResult = `Error: ${err.message}`;
+        this.permissionsResult = `Error: ${error.message}`;
       }
     },
-    getPermissionsDisplayString(permissionsArray) {
+    getPermissionsDisplayString(permissionsArray: Array<any>) {
       if (permissionsArray.length === 0) {
         return 'No permissions found.';
       }
-      const permissionNames = permissionsArray.map((perm) => perm.parentCapability);
+      const permissionNames = permissionsArray.map(
+        perm => perm.parentCapability
+      );
       return permissionNames
         .reduce((acc, name) => `${acc}${name}, `, '')
         .replace(/, $/u, '');

@@ -1,10 +1,15 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions :ethereum="ethereum"/></v-col>
-      <v-col cols="12" md="4"><PermissionsActions :ethereum="ethereum" /></v-col>
+      <v-col cols="12" md="4"
+        ><BasicActions @set-accounts="setAccounts"
+      /></v-col>
+      <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
+      <v-col cols="12" md="4"
+        ><SendTokens :accounts="accounts" :ethers-signer="ethersSigner"
+      /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
       <v-col cols="12" md="4"><Collectibles /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
@@ -25,6 +30,7 @@ import PermissionsActions from './components/PermissionsActions/PermissionsActio
 import SendEth from './components/SendEth/SendEth.vue';
 import Contract from './components/Contract/Contract.vue';
 import FailingContract from './components/FailingContract/FailingContract.vue';
+import SendTokens from './components/SendTokens/SendTokens.vue';
 import Collectibles from './components/Collectibles/Collectibles.vue';
 import EncryptDecrypt from './components/EncryptDecrypt/EncryptDecrypt.vue';
 import EthSign from './components/EthSign/EthSign.vue';
@@ -44,6 +50,7 @@ export default defineComponent({
     BasicActions,
     PermissionsActions,
     SendEth,
+    SendTokens,
     Contract,
     FailingContract,
     Collectibles,
@@ -56,16 +63,27 @@ export default defineComponent({
     EthereumChainInteractions,
     SendForm
   },
-  data(){
-    return{
-      ethersProvider: {},
-      ethereum: {}
-    }
+  data() {
+    return {
+      ethersProvider: {} as ethers.providers.Web3Provider,
+      ethereum: {},
+      accounts: new Array<string>(),
+      ethersSigner: {} as ethers.Signer
+    };
   },
-  mounted(){
+  mounted() {
     // We must specify the network as 'any' for ethers to allow network changes
-    this.ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    this.ethersProvider = new ethers.providers.Web3Provider(
+      window.ethereum,
+      'any'
+    );
     this.ethereum = window.ethereum;
+    this.ethersSigner = this.ethersProvider.getSigner();
+  },
+  methods: {
+    setAccounts(accounts: Array<string>) {
+      this.accounts = accounts;
+    }
   }
 });
 </script>
