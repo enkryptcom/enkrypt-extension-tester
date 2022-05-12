@@ -20,12 +20,13 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { reactive, ref } from 'vue';
+import type { TypeAccounts, TypeButton } from './types';
 
-const accounts = reactive({
-  list: new Array<string>(),
+const accounts: TypeAccounts = reactive({
+  list: [],
   result: ''
 });
-const button = reactive({
+const button: TypeButton = reactive({
   disabled: false,
   text: 'Connect'
 });
@@ -58,7 +59,7 @@ const getAccounts = async () => {
   }
 };
 
-const handleNewAccounts = (newAccounts: Array<string>) => {
+const handleNewAccounts = (newAccounts: string[]) => {
   accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
     // Connected to metamask
@@ -71,7 +72,7 @@ const handleNewChain = (chainID: string) => {
 };
 
 const handleNewNetwork = (networkID: string) => {
-  network.value = parseInt(networkID).toString();
+  network.value = networkID;
 };
 
 const getNetworkAndChainId = async () => {
@@ -111,7 +112,7 @@ const initialize = async () => {
     handleNewChain(chain);
   });
   ethereum.on('chainChanged', handleNewNetwork);
-  ethereum.on('accountsChanged', (newAccounts: Array<string>) => {
+  ethereum.on('accountsChanged', (newAccounts: string[]) => {
     handleNewAccounts(newAccounts);
   });
 
