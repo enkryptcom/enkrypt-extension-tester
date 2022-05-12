@@ -21,17 +21,8 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { reactive, ref } from 'vue';
 
-/*
-const props = defineProps({
-  handleEIP1559Support: {
-    default: () => ({}),
-    type: Function
-  }
-});
-*/
-
 const accounts = reactive({
-  list: new Array<unknown>(),
+  list: new Array<string>(),
   result: ''
 });
 const button = reactive({
@@ -67,10 +58,10 @@ const getAccounts = async () => {
   }
 };
 
-const handleNewAccounts = (newAccounts: Array<unknown>) => {
+const handleNewAccounts = (newAccounts: Array<string>) => {
   accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
-    //initializeAccountButtons();
+    // Connected to metamask
   }
   updateButtons();
 };
@@ -94,14 +85,6 @@ const getNetworkAndChainId = async () => {
       method: 'net_version'
     });
     handleNewNetwork(networkId);
-    /*
-    const block = await ethereum.request({
-      method: 'eth_getBlockByNumber',
-      params: ['latest', false]
-    });
-
-    props.handleEIP1559Support(block.baseFeePerGas !== undefined);
-    */
   } catch (err) {
     console.error(err);
   }
@@ -126,29 +109,9 @@ const initialize = async () => {
 
   ethereum.on('chainChanged', (chain: string) => {
     handleNewChain(chain);
-    /*
-    ethereum
-      .request({
-        method: 'eth_getBlockByNumber',
-        params: ['latest', false]
-      })
-      .then((block: { baseFeePerGas: undefined }) => {
-        propsVar.handleEIP1559Support(block.baseFeePerGas !== undefined);
-      });
-      */
   });
   ethereum.on('chainChanged', handleNewNetwork);
-  ethereum.on('accountsChanged', (newAccounts: Array<unknown>) => {
-    /*
-    ethereum
-      .request({
-        method: 'eth_getBlockByNumber',
-        params: ['latest', false]
-      })
-      .then((block: { baseFeePerGas: undefined }) => {
-        propsVar.handleEIP1559Support(block.baseFeePerGas !== undefined);
-      });
-    */
+  ethereum.on('accountsChanged', (newAccounts: Array<string>) => {
     handleNewAccounts(newAccounts);
   });
 
