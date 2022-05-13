@@ -26,9 +26,9 @@ let ethersProvider;
 let contract;
 
 let account = '';
-let status = ref('');
-let depositButtonDisabled = ref(true);
-let withdrawButtonDisabled = ref(true);
+let status = ref<string>('');
+let depositButtonDisabled = ref<boolean>(true);
+let withdrawButtonDisabled = ref<boolean>(true);
 
 ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
 
