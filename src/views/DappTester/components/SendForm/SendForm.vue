@@ -42,7 +42,7 @@
     <v-select
       :disabled="!isConnected"
       v-model="type"
-      :items="['0x0', '0x2']"
+      :items="['0x0']"
       variant="outlined"
       label="Type"
     >
@@ -101,7 +101,7 @@ const props = defineProps({
 });
 
 const send = async () => {
-  await props.ethereum.request({
+  const results = await props.ethereum.request({
     method: 'eth_sendTransaction',
     params: [
       {
@@ -114,5 +114,6 @@ const send = async () => {
       }
     ]
   });
+  console.log('send results:', results);
 };
 </script>
