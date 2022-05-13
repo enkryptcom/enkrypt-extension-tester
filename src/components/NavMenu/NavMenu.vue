@@ -24,16 +24,6 @@
   </v-app-bar>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'NavMenu',
-  data() {
-    return {};
-  },
-  props: []
-});
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped></style>
