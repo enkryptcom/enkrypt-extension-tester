@@ -11,9 +11,7 @@
           @setIsConnected="setIsConnected"
       /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
-      <v-col cols="12" md="4">
-        <SendEth :ethereum="ethereum" :signer="ethersSigner" />
-      </v-col>
+      <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"
         ><SendTokens :accounts="accounts" :ethers-signer="ethersSigner"

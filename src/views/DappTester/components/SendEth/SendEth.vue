@@ -23,75 +23,62 @@
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-//import { ethers } from 'ethers';
 
 const ethereum = window.ethereum;
 
-export default defineComponent({
-  name: 'moduleSendEth',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  data: () => {
-    return { account: '', txHash: '', txHashEIP1559: '' };
-  },
-  props: {
-    signer: {
-      type: Object,
-      default: null
-    }
-  },
-  methods: {
-    async sendTx() {
-      const result = await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [
-          {
-            from: this.account,
-            to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
-            value: '0x0',
-            gasLimit: '0x5028',
-            gasPrice: '0x2540be400',
-            type: '0x0'
-          }
-        ]
-      });
-      this.txHash = result;
-    },
+let account = ref<string>('');
+let txHash = ref<string>('');
+let txHashEIP1559 = ref<string>('');
 
-    async sendTxEIP1559() {
-      const result = await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [
-          {
-            from: this.account,
-            to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
-            value: '0x0',
-            gasLimit: '0x5028',
-            maxFeePerGas: '0x2540be400',
-            maxPriorityFeePerGas: '0x3b9aca00'
-          }
-        ]
-      });
-      this.txHashEIP1559 = result;
-    },
-
-    async getAccount() {
-      try {
-        const accounts = await ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-        this.account = accounts[0];
-      } catch (e) {
-        console.log(e);
+const sendTx = async () => {
+  const result = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [
+      {
+        from: account.value,
+        to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
+        value: '0x0',
+        gasLimit: '0x5028',
+        gasPrice: '0x2540be400',
+        type: '0x0'
       }
-    }
-  },
-  created() {
-    this.getAccount();
+    ]
+  });
+  txHash.value = result;
+};
+
+const sendTxEIP1559 = async () => {
+  const result = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [
+      {
+        from: account.value,
+        to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
+        value: '0x0',
+        gasLimit: '0x5028',
+        maxFeePerGas: '0x2540be400',
+        maxPriorityFeePerGas: '0x3b9aca00'
+      }
+    ]
+  });
+  txHashEIP1559.value = result;
+};
+
+const getAccount = async () => {
+  try {
+    const accounts = await ethereum.request({
+      method: 'eth_requestAccounts'
+    });
+    account.value = accounts[0];
+  } catch (e) {
+    console.log(e);
   }
-});
+};
+
+getAccount();
 </script>
