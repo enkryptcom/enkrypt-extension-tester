@@ -13,15 +13,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'CustomCard',
-  data() {
-    return {};
+<script setup lang="ts">
+defineProps({
+  title: {
+    type: String,
+    default: ''
   },
-  props: ['title', 'subtitle']
+  subtitle: {
+    type: String,
+    default: ''
+  }
 });
 </script>
 
