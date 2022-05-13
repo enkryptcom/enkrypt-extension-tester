@@ -92,8 +92,8 @@ onUnmounted(() => {
   ethersSigner = ethersProvider.getSigner();
 });
 
-const setAccounts = (accounts: string[]) => {
-  accounts = accounts;
+const setAccounts = (Accounts: string[]) => {
+  accounts = Accounts;
 };
 const setFromAccount = (account: string) => {
   fromAccount.value = account;
