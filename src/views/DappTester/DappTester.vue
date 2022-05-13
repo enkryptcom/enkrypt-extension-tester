@@ -21,7 +21,7 @@
         ><CollectiblesModule :ethersSigner="ethersSigner" :accounts="accounts"
       /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
-      <v-col cols="12" md="4"><EthSign :signer="ethersSigner" /></v-col>
+      <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedData
