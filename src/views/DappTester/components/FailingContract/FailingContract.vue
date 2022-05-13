@@ -24,21 +24,17 @@ import { ethers } from 'ethers';
 import { failingContractAbi, failingContractBytecode } from '@/constants.json';
 
 const ethereum = window.ethereum;
-let failingContractDeployed;
-let failingContractFactory;
-let ethersProvider;
 
-ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-
-failingContractFactory = new ethers.ContractFactory(
+let failingContractDeployed: unknown;
+let ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+let failingContractFactory = new ethers.ContractFactory(
   failingContractAbi,
   failingContractBytecode,
   ethersProvider.getSigner()
 );
-
 let account = '';
-let failingContractStatus = ref('');
-let sendFailingButtonDisabled = ref(true);
+let failingContractStatus = ref<string>('');
+let sendFailingButtonDisabled = ref<boolean>(true);
 
 const onclickDeployFailingContract = async () => {
   failingContractStatus.value = 'Deploying';
@@ -47,8 +43,9 @@ const onclickDeployFailingContract = async () => {
     failingContractDeployed = await failingContractFactory.deploy();
     await failingContractDeployed.deployTransaction.wait();
   } catch (error) {
+    const err = error as Error;
     failingContractStatus.value = 'Deployment Failed';
-    throw error;
+    throw err;
   }
 
   if (failingContractDeployed.address === undefined) {
@@ -82,8 +79,9 @@ const onclickSendFailing = async () => {
       'Failed transaction process completed as expected.';
     console.log('send failing contract result', result);
   } catch (error) {
-    console.log('error', error);
-    throw error;
+    const err = error as Error;
+    console.log('error', err);
+    throw err;
   }
 };
 
@@ -93,8 +91,9 @@ const getAccount = async () => {
       method: 'eth_requestAccounts'
     });
     account = accounts[0];
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    const err = error as Error;
+    console.log(err);
   }
 };
 

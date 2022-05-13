@@ -19,11 +19,11 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 
 const ethereum = window.ethereum;
 
-let message = ref(
+let message = ref<string>(
   '0x879a053d4800c6354e76c7985a865d2922c82fb5b3f4577b2fe08b998954f2e0'
 );
 let ethSignResult = ref<string>('');
-let account = '';
+let account: unknown = '';
 
 const onClickSign = async () => {
   try {
@@ -32,7 +32,8 @@ const onClickSign = async () => {
       params: [account, message.value]
     });
     ethSignResult.value = JSON.stringify(ethResult);
-  } catch (err) {
+  } catch (error) {
+    const err = error as Error;
     console.error(err);
     ethSignResult.value = `Error: ${err.message}`;
   }
@@ -44,8 +45,9 @@ const getAccount = async () => {
       method: 'eth_requestAccounts'
     });
     account = accounts[0];
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    const err = error as Error;
+    console.log(err);
   }
 };
 

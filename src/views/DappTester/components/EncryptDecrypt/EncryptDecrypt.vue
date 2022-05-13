@@ -63,7 +63,8 @@ const onclickGetEncryptionKeyButton = async () => {
     });
     encryptMessageInputDisabled.value = false;
   } catch (error) {
-    encryptionKeyDisplay.value = `Error: ${error.message}`;
+    const err = error as Error;
+    encryptionKeyDisplay.value = `Error: ${err.message}`;
     encryptMessageInputDisabled.value = true;
     encryptButtonDisabled.value = true;
     decryptButtonDisabled.value = true;
@@ -90,7 +91,8 @@ const onclickDecryptButton = async () => {
       params: [ciphertextDisplay.value, ethereum.selectedAddress]
     });
   } catch (error) {
-    cleartextDisplay.value = `Error: ${error.message}`;
+    const err = error as Error;
+    cleartextDisplay.value = `Error: ${err.message}`;
   }
 };
 
@@ -105,7 +107,8 @@ const onclickEncryptButton = () => {
     );
     decryptButtonDisabled.value = false;
   } catch (error) {
-    ciphertextDisplay.value = `Error: ${error.message}`;
+    const err = error as Error;
+    ciphertextDisplay.value = `Error: ${err.message}`;
     decryptButtonDisabled.value = true;
   }
 };

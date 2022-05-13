@@ -17,25 +17,13 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ethers } from 'ethers';
-import {
-  hstBytecode,
-  hstAbi,
-  piggybankBytecode,
-  piggybankAbi,
-  collectiblesAbi,
-  collectiblesBytecode,
-  failingContractAbi,
-  failingContractBytecode
-} from '@/constants.json';
+import { piggybankBytecode, piggybankAbi } from '@/constants.json';
 
 const ethereum = window.ethereum;
-let piggybankFactory;
-let ethersProvider;
-let contract;
 
-ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-
-piggybankFactory = new ethers.ContractFactory(
+let contract: unknown;
+let ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+let piggybankFactory = new ethers.ContractFactory(
   piggybankAbi,
   piggybankBytecode,
   ethersProvider.getSigner()
