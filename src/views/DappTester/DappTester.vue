@@ -2,7 +2,13 @@
   <v-container class="py-10">
     <v-row>
       <v-col cols="12" md="4"
-        ><BasicActions @set-accounts="setAccounts"
+        ><BasicActions
+          :ethereum="ethereum"
+          @setChainId="setChainId"
+          @setNetworkId="setNetworkId"
+          @setFromAccount="setFromAccount"
+          @set-accounts="setAccounts"
+          @setIsConnected="setIsConnected"
       /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
@@ -17,9 +23,28 @@
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
-      <v-col cols="12" md="4"><SignTypedData /></v-col>
-      <v-col cols="12" md="4"><SignTypedDataV3 /></v-col>
-      <v-col cols="12" md="4"><SignTypedDataV4 /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedData
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedDataV3
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedDataV4
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+          :network-id="networkId"
+          :chain-id="chainId"
+      /></v-col>
       <v-col cols="12" md="4"><EthereumChainInteractions /></v-col>
       <v-col cols="12" md="4"><SendForm /></v-col>
     </v-row>
@@ -42,12 +67,24 @@ import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
 import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
+import { ethers } from 'ethers';
 
 import { defineComponent } from 'vue';
-import { ethers } from 'ethers';
 
 export default defineComponent({
   name: 'DappTester',
+  data() {
+    return {
+      fromAccount: '',
+      isConnected: false,
+      networkId: '',
+      chainId: '',
+      ethersProvider: {} as ethers.providers.Web3Provider,
+      ethereum: {},
+      accounts: new Array<string>(),
+      ethersSigner: {} as ethers.Signer
+    };
+  },
   components: {
     BasicActions,
     PermissionsActions,
@@ -65,14 +102,6 @@ export default defineComponent({
     EthereumChainInteractions,
     SendForm
   },
-  data() {
-    return {
-      ethersProvider: {} as ethers.providers.Web3Provider,
-      ethereum: {},
-      accounts: new Array<string>(),
-      ethersSigner: {} as ethers.Signer
-    };
-  },
   mounted() {
     // We must specify the network as 'any' for ethers to allow network changes
     this.ethersProvider = new ethers.providers.Web3Provider(
@@ -81,10 +110,23 @@ export default defineComponent({
     );
     this.ethereum = window.ethereum;
     this.ethersSigner = this.ethersProvider.getSigner();
+    // this.getNewNetwork();
   },
   methods: {
-    setAccounts(accounts: Array<string>) {
+    setAccounts(accounts) {
       this.accounts = accounts;
+    },
+    setFromAccount(account) {
+      this.fromAccount = account;
+    },
+    setIsConnected(bool) {
+      this.isConnected = bool;
+    },
+    setChainId(id) {
+      this.chainId = id;
+    },
+    setNetworkId(id) {
+      this.networkId = id;
     }
   }
 });

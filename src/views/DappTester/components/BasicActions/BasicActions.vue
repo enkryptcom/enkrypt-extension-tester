@@ -8,7 +8,7 @@
     <CustomBtn :disabled="button.disabled" @click="onClickConnect">
       {{ button.text }}
     </CustomBtn>
-    <CustomBtn @click="getAccounts"> eth_accounts </CustomBtn>
+    <CustomBtn @click="getAccounts()"> eth_accounts </CustomBtn>
     <CustomTextbox title="eth_accounts result">{{
       accounts.result
     }}</CustomTextbox>
@@ -19,7 +19,7 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import type { TypeAccounts, TypeButton } from './types';
 
 const accounts: TypeAccounts = reactive({
@@ -36,7 +36,15 @@ const ethereum = window.ethereum;
 
 const emits = defineEmits<{
   (e: 'setAccounts', newAccounts: string[]): void;
+  (e: 'setFromAccount', address: string): void;
+  (e: 'setIsConnected', bool: boolean): void;
+  (e: 'setChainId', chain: string): void;
+  (e: 'setNeworkId', network: string): void;
 }>();
+
+onMounted(() => {
+  initialize();
+});
 
 const isMetaMaskConnected = () => {
   return accounts.list && accounts.list.length > 0;
@@ -48,7 +56,7 @@ const onClickConnect = async () => {
     });
     handleNewAccounts(newAccounts);
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 const getAccounts = async () => {
@@ -67,6 +75,8 @@ const handleNewAccounts = (newAccounts: string[]) => {
   accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
     emits('setAccounts', newAccounts);
+    emits('setFromAccount', newAccounts.toString());
+    emits('setIsConnected', true);
   }
   updateButtons();
 };
@@ -76,7 +86,7 @@ const handleNewChain = (chainID: string) => {
 };
 
 const handleNewNetwork = (networkID: string) => {
-  network.value = networkID;
+  network.value === networkID;
 };
 
 const getNetworkAndChainId = async () => {
@@ -85,13 +95,16 @@ const getNetworkAndChainId = async () => {
       method: 'eth_chainId'
     });
     handleNewChain(chain);
-
+    chainId.value = chain;
+    emits('setChainId', chainId.value);
     const networkId = await ethereum.request({
       method: 'net_version'
     });
     handleNewNetwork(networkId);
+    network.value = networkId;
+    emits('setNeworkId', network.value.toString());
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 
@@ -126,9 +139,7 @@ const initialize = async () => {
     });
     handleNewAccounts(newAccounts);
   } catch (err) {
-    console.log('Error on init when getting accounts', err);
+    return err;
   }
 };
-
-initialize();
 </script>
