@@ -31,9 +31,9 @@ import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 
 const ethereum = window.ethereum;
 
-let account = ref('');
-let txHash = ref('');
-let txHashEIP1559 = ref('');
+let account = ref<string>('');
+let txHash = ref<string>('');
+let txHashEIP1559 = ref<string>('');
 
 const sendTx = async () => {
   const result = await ethereum.request({
