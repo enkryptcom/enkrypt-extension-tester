@@ -48,7 +48,12 @@
       <v-col cols="12" md="4"
         ><EthereumChainInteractions :ethereum="ethereum"
       /></v-col>
-      <v-col cols="12" md="4"><SendForm /></v-col>
+      <v-col cols="12" md="4"
+        ><SendForm
+          :ethereum="ethereum"
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+      /></v-col>
     </v-row>
   </v-container>
 </template>
