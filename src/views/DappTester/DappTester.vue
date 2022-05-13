@@ -1,8 +1,10 @@
 <template>
   <v-container class="py-10">
     <v-row>
-      <v-col cols="12" md="4"><BasicActions /></v-col>
-      <v-col cols="12" md="4"><PermissionsActions /></v-col>
+      <v-col cols="12" md="4"><BasicActions :ethereum="ethereum" /></v-col>
+      <v-col cols="12" md="4">
+        <PermissionsActions :ethereum="ethereum" />
+      </v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
