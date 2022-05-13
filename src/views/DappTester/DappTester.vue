@@ -45,7 +45,9 @@
           :network-id="networkId"
           :chain-id="chainId"
       /></v-col>
-      <v-col cols="12" md="4"><EthereumChainInteractions /></v-col>
+      <v-col cols="12" md="4"
+        ><EthereumChainInteractions :ethereum="ethereum"
+      /></v-col>
       <v-col cols="12" md="4"><SendForm /></v-col>
     </v-row>
   </v-container>
