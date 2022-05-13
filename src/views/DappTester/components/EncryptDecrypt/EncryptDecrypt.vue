@@ -41,6 +41,7 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { encrypt } from 'eth-sig-util';
 import { ethers } from 'ethers';
+import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
 
