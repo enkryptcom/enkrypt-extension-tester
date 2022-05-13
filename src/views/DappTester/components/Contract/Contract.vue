@@ -21,18 +21,18 @@ import { piggybankBytecode, piggybankAbi } from '@/constants.json';
 
 const ethereum = window.ethereum;
 
-let piggybankFactory;
-let ethersProvider;
-let contract;
-
+let contract: unknown;
 let account = '';
 let status = ref<string>('');
 let depositButtonDisabled = ref<boolean>(true);
 let withdrawButtonDisabled = ref<boolean>(true);
 
-ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+const ethersProvider = new ethers.providers.Web3Provider(
+  window.ethereum,
+  'any'
+);
 
-piggybankFactory = new ethers.ContractFactory(
+const piggybankFactory = new ethers.ContractFactory(
   piggybankAbi,
   piggybankBytecode,
   ethersProvider.getSigner()
