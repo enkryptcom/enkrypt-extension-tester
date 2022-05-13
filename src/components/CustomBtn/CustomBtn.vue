@@ -4,17 +4,7 @@
   </v-btn>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'CustomBtn',
-  data() {
-    return {};
-  },
-  props: []
-});
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .v-btn {

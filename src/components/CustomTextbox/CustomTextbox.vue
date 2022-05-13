@@ -7,15 +7,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'CustomTextbox',
-  data() {
-    return {};
-  },
-  props: ['title']
+<script setup lang="ts">
+defineProps({
+  title: { type: String, default: '' }
 });
 </script>
 
