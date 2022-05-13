@@ -7,13 +7,19 @@
           @setChainId="setChainId"
           @setNetworkId="setNetworkId"
           @setFromAccount="setFromAccount"
+          @set-accounts="setAccounts"
           @setIsConnected="setIsConnected"
       /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
       <v-col cols="12" md="4"><SendEth /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
+      <v-col cols="12" md="4"
+        ><SendTokens :accounts="accounts" :ethers-signer="ethersSigner"
+      /></v-col>
       <v-col cols="12" md="4"><FailingContract /></v-col>
-      <v-col cols="12" md="4"><Collectibles /></v-col>
+      <v-col cols="12" md="4"
+        ><CollectiblesModule :ethersSigner="ethersSigner" :accounts="accounts"
+      /></v-col>
       <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
@@ -51,7 +57,8 @@ import PermissionsActions from './components/PermissionsActions/PermissionsActio
 import SendEth from './components/SendEth/SendEth.vue';
 import Contract from './components/Contract/Contract.vue';
 import FailingContract from './components/FailingContract/FailingContract.vue';
-import Collectibles from './components/Collectibles/Collectibles.vue';
+import SendTokens from './components/SendTokens/SendTokens.vue';
+import CollectiblesModule from './components/Collectibles/CollectiblesModule.vue';
 import EncryptDecrypt from './components/EncryptDecrypt/EncryptDecrypt.vue';
 import EthSign from './components/EthSign/EthSign.vue';
 import PersonalSign from './components/PersonalSign/PersonalSign.vue';
@@ -70,19 +77,22 @@ export default defineComponent({
     return {
       fromAccount: '',
       isConnected: false,
+      networkId: '',
+      chainId: '',
       ethersProvider: {},
       ethereum: {},
-      networkId: '',
-      chainId: ''
+      accounts: new Array<string>(),
+      ethersSigner: {}
     };
   },
   components: {
     BasicActions,
     PermissionsActions,
     SendEth,
+    SendTokens,
     Contract,
     FailingContract,
-    Collectibles,
+    CollectiblesModule,
     EncryptDecrypt,
     EthSign,
     PersonalSign,
@@ -99,37 +109,23 @@ export default defineComponent({
       'any'
     );
     this.ethereum = window.ethereum;
+    this.ethersSigner = this.ethersProvider.getSigner();
     // this.getNewNetwork();
   },
   methods: {
-    // async getNewNetwork() {
-    //   try {
-    //     const networkId = await this.ethereum.request({
-    //       method: 'net_version'
-    //     });
-    //     this.networkId = networkId;
-    //     const chainId = await this.ethereum.request({
-    //       method: 'eth_chainId'
-    //     });
-    //     this.chainId = chainId;
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
+    setAccounts(accounts) {
+      this.accounts = accounts;
+    },
     setFromAccount(account) {
-      // console.log('setFromAccount emitted and received', account);
       this.fromAccount = account;
     },
     setIsConnected(bool) {
-      // console.log('setIsConncted emitted and received', bool);
       this.isConnected = bool;
     },
     setChainId(id) {
-      // console.log('setChainId emitted and received', id);
       this.chainId = id;
     },
     setNetworkId(id) {
-      // console.log('setNetworkId emitted and received', id);
       this.networkid = id;
     }
   }

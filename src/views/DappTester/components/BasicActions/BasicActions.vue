@@ -3,14 +3,14 @@
     <div class="font-weight-bold">Network: {{ network }}</div>
     <div class="font-weight-bold">ChainId: {{ chainId }}</div>
     <div class="font-weight-bold">
-      Accounts: {{ accounts.length > 0 ? accounts[0] : '' }}
+      Accounts: {{ accounts.list.length > 0 ? accounts.list[0] : '' }}
     </div>
-    <CustomBtn :disabled="isDisabled" @click="onClickConnect()">
-      {{ btnText }}
+    <CustomBtn :disabled="button.disabled" @click="onClickConnect">
+      {{ button.text }}
     </CustomBtn>
     <CustomBtn @click="getAccounts()"> eth_accounts </CustomBtn>
     <CustomTextbox title="eth_accounts result">{{
-      accountsResult
+      accounts.result
     }}</CustomTextbox>
   </CustomCard>
 </template>
@@ -19,22 +19,35 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { ref, onMounted } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import type { TypeAccounts, TypeButton } from './types';
 
-const accounts = ref<string[]>([]);
-const accountsResult = ref<string>('');
-const btnText = ref<string>('Connect');
-const isDisabled = ref<boolean>(false);
+const accounts: TypeAccounts = reactive({
+  list: [],
+  result: ''
+});
+const button: TypeButton = reactive({
+  disabled: false,
+  text: 'Connect'
+});
 const chainId = ref<string>('');
 const network = ref<string>('');
 const ethereum = window.ethereum;
+
+const emits = defineEmits<{
+  (e: 'setAccounts', newAccounts: string[]): void;
+  (e: 'setFromAccount', address: string): void;
+  (e: 'setIsConnected', bool: boolean): void;
+  (e: 'setChainId', chain: string): void;
+  (e: 'setNeworkId', network: string): void;
+}>();
 
 onMounted(() => {
   initialize();
 });
 
 const isMetaMaskConnected = () => {
-  return accounts.value && accounts.value.length > 0;
+  return accounts.list && accounts.list.length > 0;
 };
 const onClickConnect = async () => {
   try {
@@ -51,23 +64,18 @@ const getAccounts = async () => {
     const _accounts = await ethereum.request({
       method: 'eth_accounts'
     });
-    accountsResult.value = _accounts[0] || 'Not able to get accounts';
+    accounts.result = _accounts[0] || 'Not able to get accounts';
   } catch (err) {
-    accountsResult.value = `Error: ${err}`;
+    console.log(err);
+    accounts.result = `Error: ${err}`;
   }
 };
 
-const emits = defineEmits<{
-  (e: 'setFromAccount', address: string): void;
-  (e: 'setIsConnected', bool: boolean): void;
-  (e: 'setChainId', chain: string): void;
-  (e: 'setNeworkId', network: string): void;
-}>();
-
-const handleNewAccounts = newAccounts => {
-  accounts.value = newAccounts;
+const handleNewAccounts = (newAccounts: string[]) => {
+  accounts.list = newAccounts;
   if (isMetaMaskConnected()) {
-    emits('setFromAccount', accounts.value.toString());
+    emits('setAccounts', newAccounts);
+    emits('setFromAccount', newAccounts.toString());
     emits('setIsConnected', true);
   }
   updateButtons();
@@ -102,11 +110,11 @@ const getNetworkAndChainId = async () => {
 
 const updateButtons = () => {
   if (isMetaMaskConnected()) {
-    btnText.value = 'Connected';
-    isDisabled.value = true;
+    button.text = 'Connected';
+    button.disabled = true;
   } else {
-    btnText.value = 'Connect';
-    isDisabled.value = false;
+    button.text = 'Connect';
+    button.disabled = false;
   }
 };
 
@@ -121,7 +129,7 @@ const initialize = async () => {
     handleNewChain(chain);
   });
   ethereum.on('chainChanged', handleNewNetwork);
-  ethereum.on('accountsChanged', (newAccounts: Array<string[]>) => {
+  ethereum.on('accountsChanged', (newAccounts: string[]) => {
     handleNewAccounts(newAccounts);
   });
 
