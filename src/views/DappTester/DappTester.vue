@@ -58,7 +58,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import BasicActions from './components/BasicActions/BasicActions.vue';
 import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
 import SendEth from './components/SendEth/SendEth.vue';
@@ -75,66 +75,36 @@ import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
 import { ethers } from 'ethers';
+import { ref, onUnmounted } from 'vue';
 
-import { defineComponent } from 'vue';
+let fromAccount = ref<string>('');
+let isConnected = ref<boolean>(false);
+let networkId = ref<string>('');
+let chainId = ref<string>('');
+let ethersProvider = {} as ethers.providers.Web3Provider;
+let ethereum = {};
+let accounts = new Array<string>();
+let ethersSigner = {} as ethers.Signer;
 
-export default defineComponent({
-  name: 'DappTester',
-  data() {
-    return {
-      fromAccount: '',
-      isConnected: false,
-      networkId: '',
-      chainId: '',
-      ethersProvider: {} as ethers.providers.Web3Provider,
-      ethereum: {},
-      accounts: new Array<string>(),
-      ethersSigner: {} as ethers.Signer
-    };
-  },
-  components: {
-    BasicActions,
-    PermissionsActions,
-    SendEth,
-    SendTokens,
-    Contract,
-    FailingContract,
-    CollectiblesModule,
-    EncryptDecrypt,
-    EthSign,
-    PersonalSign,
-    SignTypedData,
-    SignTypedDataV3,
-    SignTypedDataV4,
-    EthereumChainInteractions,
-    SendForm
-  },
-  mounted() {
-    // We must specify the network as 'any' for ethers to allow network changes
-    this.ethersProvider = new ethers.providers.Web3Provider(
-      window.ethereum,
-      'any'
-    );
-    this.ethereum = window.ethereum;
-    this.ethersSigner = this.ethersProvider.getSigner();
-    // this.getNewNetwork();
-  },
-  methods: {
-    setAccounts(accounts) {
-      this.accounts = accounts;
-    },
-    setFromAccount(account) {
-      this.fromAccount = account;
-    },
-    setIsConnected(bool) {
-      this.isConnected = bool;
-    },
-    setChainId(id) {
-      this.chainId = id;
-    },
-    setNetworkId(id) {
-      this.networkId = id;
-    }
-  }
+onUnmounted(() => {
+  ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+  ethereum = window.ethereum;
+  ethersSigner = ethersProvider.getSigner();
 });
+
+const setAccounts = (accounts: string[]) => {
+  accounts = accounts;
+};
+const setFromAccount = (account: string) => {
+  fromAccount.value = account;
+};
+const setIsConnected = (bool: boolean) => {
+  isConnected.value = bool;
+};
+const setChainId = (id: string) => {
+  chainId.value = id;
+};
+const setNetworkId = (id: string) => {
+  networkId.value = id;
+};
 </script>
