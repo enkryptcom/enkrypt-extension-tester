@@ -8,20 +8,20 @@
         {{ subtitle }}
       </h5>
     </div>
-    <div v-if="false" class="mt-3 mb-5 divider" />
     <slot></slot>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'CustomCard',
-  data() {
-    return {};
+<script setup lang="ts">
+defineProps({
+  title: {
+    type: String,
+    default: ''
   },
-  props: ['title', 'subtitle']
+  subtitle: {
+    type: String,
+    default: ''
+  }
 });
 </script>
 

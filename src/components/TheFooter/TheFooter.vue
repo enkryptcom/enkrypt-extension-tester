@@ -14,18 +14,6 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'TheFooter',
-  data() {
-    return {};
-  },
-  props: []
-});
-</script>
-
 <style lang="scss" scoped>
 .the-footer {
   padding: 5px 0;

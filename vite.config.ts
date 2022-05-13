@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue';
 import vuetify from '@vuetify/vite-plugin';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import path from 'path';
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -42,17 +41,4 @@ export default defineConfig({
     https: true,
     port: 8080
   }
-  /* remove the need to specify .vue files https://vitejs.dev/config/#resolve-extensions
-  resolve: {
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ]
-  },
-  */
 });
