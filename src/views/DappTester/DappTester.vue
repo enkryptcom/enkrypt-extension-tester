@@ -51,7 +51,7 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import BasicActions from './components/BasicActions/BasicActions.vue';
 import PermissionsActions from './components/PermissionsActions/PermissionsActions.vue';
 import SendEth from './components/SendEth/SendEth.vue';
@@ -79,10 +79,10 @@ export default defineComponent({
       isConnected: false,
       networkId: '',
       chainId: '',
-      ethersProvider: {},
+      ethersProvider: {} as ethers.providers.Web3Provider,
       ethereum: {},
       accounts: new Array<string>(),
-      ethersSigner: {}
+      ethersSigner: {} as ethers.Signer
     };
   },
   components: {
@@ -126,7 +126,7 @@ export default defineComponent({
       this.chainId = id;
     },
     setNetworkId(id) {
-      this.networkid = id;
+      this.networkId = id;
     }
   }
 });
