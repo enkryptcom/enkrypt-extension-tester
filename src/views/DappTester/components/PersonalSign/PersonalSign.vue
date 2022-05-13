@@ -29,6 +29,7 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { recoverPersonalSignature } from 'eth-sig-util';
+import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
 
@@ -54,7 +55,7 @@ const onclickPersonalSign = async () => {
     disablePersonalSignVerify.value = false;
   } catch (err) {
     console.error(err);
-    personalSignResult.value = `Error: ${err.message}`;
+    personalSignResult.value = `Error: ${err}`;
   }
 };
 
@@ -94,8 +95,8 @@ const onclickPersonalSignVerify = async () => {
     }
   } catch (err) {
     console.error(err);
-    personalSignVerifySigUtilResult.value = `Error: ${err.message}`;
-    personalSignVerifyECRecoverResult.value = `Error: ${err.message}`;
+    personalSignVerifySigUtilResult.value = `Error: ${err}`;
+    personalSignVerifyECRecoverResult.value = `Error: ${err}`;
   }
 };
 
