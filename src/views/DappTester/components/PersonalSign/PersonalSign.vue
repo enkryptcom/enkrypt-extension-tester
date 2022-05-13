@@ -33,10 +33,10 @@ import { recoverPersonalSignature } from 'eth-sig-util';
 const ethereum = window.ethereum;
 
 let account = '';
-let personalSignResult = ref('');
-let disablePersonalSignVerify = ref(true);
-let personalSignVerifySigUtilResult = ref('');
-let personalSignVerifyECRecoverResult = ref('');
+let personalSignResult = ref<string>('');
+let disablePersonalSignVerify = ref<boolean>(true);
+let personalSignVerifySigUtilResult = ref<string>('');
+let personalSignVerifyECRecoverResult = ref<string>('');
 
 /**
  * Personal Sign
