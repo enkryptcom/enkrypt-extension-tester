@@ -11,13 +11,13 @@
   </CustomCard>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ethers } from 'ethers';
 import { piggybankBytecode, piggybankAbi } from '@/constants.json';
+import { ref, onMounted } from 'vue';
 
 const ethereum = window.ethereum;
 
@@ -29,75 +29,68 @@ let piggybankFactory = new ethers.ContractFactory(
   ethersProvider.getSigner()
 );
 
-export default defineComponent({
-  name: 'ModuleContract',
-  components: { CustomCard, CustomTextbox, CustomBtn },
-  data: () => {
-    return {
-      account: '',
-      status: '',
-      depositButtonDisabled: true,
-      withdrawButtonDisabled: true
-    };
-  },
-  methods: {
-    async onClickDeploy() {
-      this.status = 'Deploying';
+let account = ref<string>('');
+const status = ref<string>('');
+const depositButtonDisabled = ref<boolean>(true);
+const withdrawButtonDisabled = ref<boolean>(true);
 
-      try {
-        contract = await piggybankFactory.deploy();
-        await contract.deployTransaction.wait();
-      } catch (error) {
-        this.status = 'Deployment Failed';
-        throw error;
-      }
+const onClickDeploy = async () => {
+  status.value = 'Deploying';
 
-      if (contract.address === undefined) {
-        return;
-      }
-
-      console.log(
-        `Contract mined! address: ${contract.address} transactionHash: ${contract.transactionHash}`
-      );
-      this.status = 'Deployed';
-      this.depositButtonDisabled = false;
-      this.withdrawButtonDisabled = false;
-
-      console.log(contract);
-    },
-    async onClickDeposit() {
-      this.status = 'Deposit initiated';
-      const result = await contract.deposit({
-        from: this.account,
-        value: '0x3782dace9d900000'
-      });
-      console.log(result);
-      const receipt = await result.wait();
-      console.log(receipt);
-      this.status = 'Deposit completed';
-    },
-    async onClickWithdraw() {
-      const result = await contract.withdraw('0xde0b6b3a7640000', {
-        from: this.account
-      });
-      console.log(result);
-      const receipt = await result.wait();
-      console.log(receipt);
-      this.status = 'Withdrawn';
-    },
-    async getAccount() {
-      try {
-        const accounts = await ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-        this.account = accounts[0];
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  },
-  created() {
-    this.getAccount();
+  try {
+    contract = await piggybankFactory.deploy();
+    await contract.deployTransaction.wait();
+  } catch (error) {
+    status.value = 'Deployment Failed';
+    throw error;
   }
+
+  if (contract.address === undefined) {
+    return;
+  }
+
+  console.log(
+    `Contract mined! address: ${contract.address} transactionHash: ${contract.transactionHash}`
+  );
+  status.value = 'Deployed';
+  depositButtonDisabled.value = false;
+  withdrawButtonDisabled.value = false;
+
+  console.log(contract);
+};
+const onClickDeposit = async () => {
+  status.value = 'Deposit initiated';
+  const result = await contract.deposit({
+    from: account,
+    value: '0x3782dace9d900000'
+  });
+  console.log(result);
+  const receipt = await result.wait();
+  console.log(receipt);
+  status.value = 'Deposit completed';
+};
+const onClickWithdraw = async () => {
+  const result = await contract.withdraw('0xde0b6b3a7640000', {
+    from: account
+  });
+  console.log(result);
+  const receipt = await result.wait();
+  console.log(receipt);
+  status.value = 'Withdrawn';
+};
+const getAccount = async () => {
+  try {
+    const accounts = await ethereum.request({
+      method: 'eth_requestAccounts'
+    });
+    console.log('accounts', accounts);
+    account = accounts[0];
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+onMounted(() => {
+  getAccount();
 });
 </script>
