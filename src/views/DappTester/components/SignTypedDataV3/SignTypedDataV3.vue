@@ -120,20 +120,16 @@ const signV3 = async () => {
 };
 
 const verify = async () => {
-  try {
-    const from = props.fromAccount;
-    const signature = messageData.value;
-    const recoveredAddr = await recoverTypedSignature({
-      data: msgParams as never,
-      signature,
-      version: SignTypedDataVersion.V3
-    });
-    if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
-      verifiedResults.value = recoveredAddr;
-      isVerified.value = true;
-    }
-  } catch (err) {
-    return err;
+  const from = props.fromAccount;
+  const signature = messageData.value;
+  const recoveredAddr = await recoverTypedSignature({
+    data: msgParams as never,
+    signature,
+    version: SignTypedDataVersion.V3
+  });
+  if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
+    verifiedResults.value = recoveredAddr;
+    isVerified.value = true;
   }
 };
 </script>
