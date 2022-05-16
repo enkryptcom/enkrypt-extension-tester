@@ -46,7 +46,7 @@ onMounted(() => {
   initialize();
 });
 
-const isMetaMaskConnected = () => {
+const isWeb3Connected = () => {
   return accounts.list && accounts.list.length > 0;
 };
 const onClickConnect = async () => {
@@ -73,7 +73,7 @@ const getAccounts = async () => {
 
 const handleNewAccounts = (newAccounts: string[]) => {
   accounts.list = newAccounts;
-  if (isMetaMaskConnected()) {
+  if (isWeb3Connected()) {
     emits('setAccounts', newAccounts);
     emits('setFromAccount', newAccounts.toString());
     emits('setIsConnected', true);
@@ -109,7 +109,7 @@ const getNetworkAndChainId = async () => {
 };
 
 const updateButtons = () => {
-  if (isMetaMaskConnected()) {
+  if (isWeb3Connected()) {
     button.text = 'Connected';
     button.disabled = true;
   } else {
