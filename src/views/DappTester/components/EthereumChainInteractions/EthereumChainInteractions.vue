@@ -1,7 +1,11 @@
 <template>
   <CustomCard title="Ethereum Chain Interactions">
-    <CustomBtn @click="addEthereumChain()">Add xDAI Chain</CustomBtn>
-    <CustomBtn @click="switchEthereumChain()">Switch to xDAI Chain</CustomBtn>
+    <CustomBtn :disabled="!isConnected" @click="addEthereumChain()"
+      >Add xDAI Chain
+    </CustomBtn>
+    <CustomBtn :disabled="!isConnected" @click="switchEthereumChain()"
+      >Switch to xDAI Chain
+    </CustomBtn>
   </CustomCard>
 </template>
 
@@ -13,6 +17,10 @@ const props = defineProps({
   ethereum: {
     type: Object,
     default: null
+  },
+  isConnected: {
+    type: Boolean,
+    default: false
   }
 });
 

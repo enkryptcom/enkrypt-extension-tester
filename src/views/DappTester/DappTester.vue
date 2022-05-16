@@ -46,7 +46,9 @@
           :chain-id="chainId"
       /></v-col>
       <v-col cols="12" md="4"
-        ><EthereumChainInteractions :ethereum="ethereum"
+        ><EthereumChainInteractions
+          :ethereum="ethereum"
+          :is-connected="isConnected"
       /></v-col>
       <v-col cols="12" md="4"
         ><SendForm
