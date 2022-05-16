@@ -58,7 +58,7 @@ const _decimalUnits = 4;
 const _tokenSymbol = 'TST';
 const ethereum = window.ethereum;
 
-async function createToken() {
+const createToken = async () => {
   try {
     const hstFactory = new ethers.ContractFactory(
       hstAbi,
@@ -90,9 +90,9 @@ async function createToken() {
     tokenAddress.value = 'Creation Failed';
     throw error;
   }
-}
+};
 
-async function watchAssetClick() {
+const watchAssetClick = async () => {
   if (tokenAddress.value == 'Creation Failed' || tokenAddress.value == 'null')
     return;
   const result = await ethereum.request({
@@ -108,9 +108,9 @@ async function watchAssetClick() {
     }
   });
   console.log('addToken', result);
-}
+};
 
-async function transferTokensClick() {
+const transferTokensClick = async () => {
   const result = await contract.transfer(
     '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
     '15000',
@@ -121,9 +121,9 @@ async function transferTokensClick() {
     }
   );
   console.log('transfer', result);
-}
+};
 
-async function approveTokensClick() {
+const approveTokensClick = async () => {
   const result = await contract.approve(
     '0x9bc5baF874d2DA8D216aE9f137804184EE5AfEF4',
     '70000',
@@ -134,9 +134,9 @@ async function approveTokensClick() {
     }
   );
   console.log('approve', result);
-}
+};
 
-async function transferTokensWithoutGasClick() {
+const transferTokensWithoutGasClick = async () => {
   const result = await contract.transfer(
     '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
     '15000',
@@ -145,9 +145,9 @@ async function transferTokensWithoutGasClick() {
     }
   );
   console.log('transferWithoutGas', result);
-}
+};
 
-async function approveTokensWithoutGasClick() {
+const approveTokensWithoutGasClick = async () => {
   const result = await contract.approve(
     '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
     '70000',
@@ -156,5 +156,5 @@ async function approveTokensWithoutGasClick() {
     }
   );
   console.log('approveWithoutGas', result);
-}
+};
 </script>
