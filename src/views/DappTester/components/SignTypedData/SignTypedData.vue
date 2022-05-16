@@ -55,19 +55,20 @@ const props = defineProps({
   }
 });
 
+const msgParams = [
+  {
+    type: 'string',
+    name: 'Message',
+    value: 'Hi, Alice!'
+  },
+  {
+    type: 'uint32',
+    name: 'A number',
+    value: '1337'
+  }
+];
+
 const signV1 = async () => {
-  const msgParams = [
-    {
-      type: 'string',
-      name: 'Message',
-      value: 'Hi, Alice!'
-    },
-    {
-      type: 'uint32',
-      name: 'A number',
-      value: '1337'
-    }
-  ];
   try {
     const from = props.fromAccount;
     const signedData = await props.ethereum.request({
@@ -81,32 +82,16 @@ const signV1 = async () => {
   }
 };
 const verify = async () => {
-  const msgParams = [
-    {
-      type: 'string',
-      name: 'Message',
-      value: 'Hi, Alice!'
-    },
-    {
-      type: 'uint32',
-      name: 'A number',
-      value: '1337'
-    }
-  ];
-  try {
-    const from = props.fromAccount;
-    const signature = messageData.value;
-    const recoveredAddr = recoverTypedSignature({
-      data: msgParams,
-      signature,
-      version: SignTypedDataVersion.V1
-    });
-    if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
-      verifiedResults.value = recoveredAddr;
-      isVerified.value = true;
-    }
-  } catch (err) {
-    return err;
+  const from = props.fromAccount;
+  const signature = messageData.value;
+  const recoveredAddr = recoverTypedSignature({
+    data: msgParams,
+    signature,
+    version: SignTypedDataVersion.V1
+  });
+  if (toChecksumAddress(recoveredAddr) === toChecksumAddress(from)) {
+    verifiedResults.value = recoveredAddr;
+    isVerified.value = true;
   }
 };
 </script>
