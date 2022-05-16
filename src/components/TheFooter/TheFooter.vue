@@ -14,8 +14,6 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
-
 <style lang="scss" scoped>
 .the-footer {
   padding: 5px 0;

@@ -8,7 +8,6 @@
         {{ subtitle }}
       </h5>
     </div>
-    <div v-if="false" class="mt-3 mb-5 divider" />
     <slot></slot>
   </div>
 </template>
