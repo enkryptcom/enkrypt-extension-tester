@@ -49,7 +49,7 @@ const disabled: TypeDisabled = reactive({
 });
 let contract = {} as ethers.Contract;
 
-async function deployClick() {
+const deployClick = async () => {
   let Contract = {} as ethers.Contract;
   let receipt = {} as ethers.providers.TransactionReceipt;
   collectibles.status = 'Deploying';
@@ -75,9 +75,9 @@ async function deployClick() {
   collectibles.status = `Deployed\r\n${msg}`;
   disabled.mint = false;
   disabled.amount = false;
-}
+};
 
-async function mintClick() {
+const mintClick = async () => {
   collectibles.status = 'Mint initiated';
   let result = await contract.mintCollectibles(collectibles.amount, {
     from: props.accounts[0]
@@ -86,5 +86,5 @@ async function mintClick() {
   const txnHash = result.transactionHash;
   console.log(result);
   collectibles.status = `Mint completed\nTransaction Hash:\n${txnHash}`;
-}
+};
 </script>
