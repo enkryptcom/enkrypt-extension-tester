@@ -39,7 +39,7 @@ import { ref } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { encrypt } from 'eth-sig-util';
+import { encrypt } from '@metamask/eth-sig-util';
 import { ethers } from 'ethers';
 import { Buffer } from 'buffer';
 
@@ -99,11 +99,11 @@ const onclickDecryptButton = async () => {
 const onclickEncryptButton = () => {
   try {
     ciphertextDisplay.value = stringifiableToHex(
-      encrypt(
-        encryptionKeyDisplay.value,
-        { data: encryptMessageInput.value },
-        'x25519-xsalsa20-poly1305'
-      )
+      encrypt({
+        data: encryptMessageInput.value,
+        publicKey: encryptionKeyDisplay.value,
+        version: 'x25519-xsalsa20-poly1305'
+      })
     );
     decryptButtonDisabled.value = false;
   } catch (error) {

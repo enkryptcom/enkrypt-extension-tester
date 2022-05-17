@@ -1,5 +1,6 @@
 interface Window {
   ethereum: ethereum;
+  Buffer: any;
 }
 
 interface ethereum {

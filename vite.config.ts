@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vuetify from '@vuetify/vite-plugin';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import path from 'path';
+import inject from '@rollup/plugin-inject';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -27,8 +29,19 @@ export default defineConfig({
     }
   },
   define: {
-    'process.env': {},
     global: 'globalThis'
+  },
+  build: {
+    rollupOptions: {
+      plugins: [
+        inject({
+          include: ['node_modules/**/*'],
+          exclude: ['node_modules/tweetnacl-util/**', 'dist/**/*'],
+          modules: { Buffer: ['buffer', 'Buffer'] }
+        })
+      ],
+      external: ['ethereum']
+    }
   },
   resolve: {
     alias: {
