@@ -22,14 +22,10 @@
       <v-col cols="12" md="4"><EthSign /></v-col>
       <v-col cols="12" md="4"><PersonalSign /></v-col>
       <v-col cols="12" md="4"
-        ><SignTypedData
-          :ethereum="ethereum"
-          :from-account="fromAccount"
-          :is-connected="isConnected"
+        ><SignTypedData :from-account="fromAccount" :is-connected="isConnected"
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV3
-          :ethereum="ethereum"
           :from-account="fromAccount"
           :is-connected="isConnected"
           :network-id="networkId"
@@ -37,7 +33,6 @@
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV4
-          :ethereum="ethereum"
           :from-account="fromAccount"
           :is-connected="isConnected"
           :network-id="networkId"

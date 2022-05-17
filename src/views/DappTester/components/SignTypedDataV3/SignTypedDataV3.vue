@@ -35,12 +35,9 @@ const messageData = ref<string>('');
 const verifiedResults = ref<string>('');
 const isSigned = ref<boolean>(false);
 const isVerified = ref<boolean>(false);
+const ethereum = window.ethereum;
 
 const props = defineProps({
-  ethereum: {
-    type: Object,
-    default: null
-  },
   handleEIP1559Support: {
     default: () => {
       return {};
@@ -108,7 +105,7 @@ const msgParams = {
 const signV3 = async () => {
   try {
     const from = props.fromAccount;
-    const signedData = await props.ethereum.request({
+    const signedData = await ethereum.request({
       method: 'eth_signTypedData_v3',
       params: [from, JSON.stringify(msgParams)]
     });
