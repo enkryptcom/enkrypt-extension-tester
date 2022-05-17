@@ -29,20 +29,18 @@ import { ethers } from 'ethers';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { hstBytecode, hstAbi } from '@/assets/json/constants.json';
-import { reactive, ref, type PropType } from 'vue';
+import { reactive, ref, type PropType, onMounted } from 'vue';
 import type { TypeDisabled } from './types';
 
 const props = defineProps({
   accounts: {
     type: Array as PropType<string[]>,
     default: () => []
-  },
-  ethersSigner: {
-    type: Object as PropType<ethers.Signer>,
-    default: () => ({})
   }
 });
 
+let ethersProvider = {} as ethers.providers.Web3Provider;
+let ethersSigner = {} as ethers.Signer;
 const tokenAddress = ref<string>('');
 const disabled: TypeDisabled = reactive({
   watch: true,
@@ -56,14 +54,20 @@ const _initialAmount = 100;
 const _tokenName = 'TST';
 const _decimalUnits = 4;
 const _tokenSymbol = 'TST';
-const ethereum = window.ethereum;
+let ethereum = window.ethereum;
+
+onMounted(() => {
+  ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+  ethereum = window.ethereum;
+  ethersSigner = ethersProvider.getSigner();
+});
 
 const createToken = async () => {
   try {
     const hstFactory = new ethers.ContractFactory(
       hstAbi,
       hstBytecode,
-      props.ethersSigner
+      ethersSigner
     );
     const Contract = await hstFactory.deploy(
       _initialAmount,
