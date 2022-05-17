@@ -19,8 +19,7 @@
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { reactive, type PropType } from 'vue';
-
+import { reactive, type PropType, onMounted } from 'vue';
 import { ethers } from 'ethers';
 import {
   collectiblesAbi,
@@ -29,16 +28,14 @@ import {
 import type { TypeCollectibles, TypeDisabled } from './types';
 
 const props = defineProps({
-  ethersSigner: {
-    type: Object as PropType<ethers.Signer>,
-    required: true,
-    default: () => ({})
-  },
   accounts: {
     type: Array as PropType<string[]>,
     default: () => []
   }
 });
+
+let ethersProvider = {} as ethers.providers.Web3Provider;
+let ethersSigner = {} as ethers.Signer;
 const collectibles: TypeCollectibles = reactive({
   amount: 1,
   status: ''
@@ -49,6 +46,11 @@ const disabled: TypeDisabled = reactive({
 });
 let contract = {} as ethers.Contract;
 
+onMounted(() => {
+  ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+  ethersSigner = ethersProvider.getSigner();
+});
+
 const deployClick = async () => {
   let Contract = {} as ethers.Contract;
   let receipt = {} as ethers.providers.TransactionReceipt;
@@ -57,7 +59,7 @@ const deployClick = async () => {
   const collectiblesFactory = new ethers.ContractFactory(
     collectiblesAbi,
     collectiblesBytecode,
-    props.ethersSigner
+    ethersSigner
   );
 
   try {

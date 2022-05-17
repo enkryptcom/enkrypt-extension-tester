@@ -28,7 +28,7 @@ import { ref } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { recoverPersonalSignature } from 'eth-sig-util';
+import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
@@ -70,7 +70,7 @@ const onclickPersonalSignVerify = async () => {
     const sign = personalSignResult.value;
     const recoveredAddr = recoverPersonalSignature({
       data: msg,
-      sig: sign
+      signature: sign
     });
     if (recoveredAddr === from) {
       console.log(`SigUtil Successfully verified signer as ${recoveredAddr}`);
