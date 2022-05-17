@@ -1,18 +1,20 @@
 # MEW Web3 Extension Tester
 
-MyEtherWallet's dapp tester to end-to-end testing
+MyEtherWallet's Web3 Extension tester for end-to-end testing and quality assurance
+
+---
 
 ## Getting Started
 
-* Open terminal
+1. Open terminal
   
-* Clone the repo: `https://github.com/MyEtherWallet/web3-extension-tester.git`
+2. Clone the repo: `https://github.com/MyEtherWallet/web3-extension-tester.git`
 
+3. Run `npm install` to install Node packages
 
-* Run npm ci to install node packages.
-run npm run build. You can also use the offline version by opening the index file from the dist folder with your preferred browser
-start npm start
-If npm start fails and above the error message it states 'new update found' then the package.json version of the indicated packages needs to be updated to match the versions shown in the notice.
-App should be running in https://localhost:8080
+4. Run `npm run dev`
 
+5. App should be running on `https://localhost:8080`
 
+---
+Special thanks to [MetaMask](https://github.com/MetaMask/test-dapp) for providing the code base!
