@@ -15,7 +15,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .custom-textbox {
-  background-color: rgb(var(--v-theme-blue-lighten-1));
+  background-color: #eaf3ff;
   border: 1px solid #e6e8ec;
   border-radius: 4px;
   padding: 10px;
