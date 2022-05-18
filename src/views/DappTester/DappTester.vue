@@ -71,10 +71,10 @@ import EthereumChainInteractions from './components/EthereumChainInteractions/Et
 import SendForm from './components/SendForm/SendForm.vue';
 import { ref, onMounted } from 'vue';
 
-let fromAccount = ref<string>('');
-let isConnected = ref<boolean>(false);
-let networkId = ref<string>('');
-let chainId = ref<string>('');
+const fromAccount = ref<string>('');
+const isConnected = ref<boolean>(false);
+const networkId = ref<string>('');
+const chainId = ref<string>('');
 let ethereum = {};
 let accounts = new Array<string>();
 

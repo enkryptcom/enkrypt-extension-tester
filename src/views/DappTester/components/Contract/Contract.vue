@@ -16,16 +16,19 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ethers } from 'ethers';
-import { piggybankBytecode, piggybankAbi } from '@/constants.json';
+import PiggyBank from '@/assets/json/piggybank';
 import { ref, onMounted } from 'vue';
 
 const ethereum = window.ethereum;
 
-let contract: unknown;
-let ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-let piggybankFactory = new ethers.ContractFactory(
-  piggybankAbi,
-  piggybankBytecode,
+let contract: ethers.Contract;
+const ethersProvider = new ethers.providers.Web3Provider(
+  window.ethereum,
+  'any'
+);
+const piggybankFactory = new ethers.ContractFactory(
+  PiggyBank.piggybankAbi,
+  PiggyBank.piggybankBytecode,
   ethersProvider.getSigner()
 );
 

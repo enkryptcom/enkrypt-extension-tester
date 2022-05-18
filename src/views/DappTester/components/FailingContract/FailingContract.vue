@@ -21,20 +21,23 @@ import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { ethers } from 'ethers';
-import { failingContractAbi, failingContractBytecode } from '@/constants.json';
+import PiggyBank from '@/assets/json/piggybank';
 
 const ethereum = window.ethereum;
 
-let failingContractDeployed: unknown;
-let ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-let failingContractFactory = new ethers.ContractFactory(
-  failingContractAbi,
-  failingContractBytecode,
+let failingContractDeployed: ethers.Contract;
+const ethersProvider = new ethers.providers.Web3Provider(
+  window.ethereum,
+  'any'
+);
+const failingContractFactory = new ethers.ContractFactory(
+  PiggyBank.failingContractAbi,
+  PiggyBank.failingContractBytecode,
   ethersProvider.getSigner()
 );
 let account = '';
-let failingContractStatus = ref<string>('');
-let sendFailingButtonDisabled = ref<boolean>(true);
+const failingContractStatus = ref<string>('');
+const sendFailingButtonDisabled = ref<boolean>(true);
 
 const onclickDeployFailingContract = async () => {
   failingContractStatus.value = 'Deploying';

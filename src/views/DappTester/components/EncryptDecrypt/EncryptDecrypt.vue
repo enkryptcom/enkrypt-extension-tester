@@ -45,15 +45,15 @@ import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
 
-let encryptMessageInput = ref('');
-let encryptionKeyDisplay = ref('');
-let ciphertextDisplay = ref('');
-let cleartextDisplay = ref('');
+const encryptMessageInput = ref('');
+const encryptionKeyDisplay = ref('');
+const ciphertextDisplay = ref('');
+const cleartextDisplay = ref('');
 let account = '';
-let encryptMessageInputDisabled = ref(true);
-let getEncryptionKeyButtonDisabled = ref(false);
-let encryptButtonDisabled = ref(true);
-let decryptButtonDisabled = ref(true);
+const encryptMessageInputDisabled = ref(true);
+const getEncryptionKeyButtonDisabled = ref(false);
+const encryptButtonDisabled = ref(true);
+const decryptButtonDisabled = ref(true);
 
 const onclickGetEncryptionKeyButton = async () => {
   try {
