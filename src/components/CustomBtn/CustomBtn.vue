@@ -1,13 +1,12 @@
 <template>
-  <v-btn color="btn" class="my-3" block flat>
+  <v-btn class="my-2" color="btn" flat block>
     <slot></slot>
   </v-btn>
 </template>
 
-<script setup lang="ts"></script>
-
 <style lang="scss" scoped>
 .v-btn {
   font-size: 0.75rem;
+  outline: 1px solid #e6e8ec;
 }
 </style>

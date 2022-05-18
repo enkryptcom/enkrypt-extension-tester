@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="blue" flat>
+  <v-app-bar color="#184f90" flat>
     <v-container>
       <div class="d-flex align-center">
         <img :src="logo" alt="Myetherwallet.com" height="30" class="mr-10" />
