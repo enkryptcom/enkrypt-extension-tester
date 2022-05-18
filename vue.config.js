@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = defineConfig({
-  publicPath: './web3-extension-tester/',
+  publicPath: '/web3-extension-tester/',
   transpileDependencies: true,
   pluginOptions: {
     vuetify: {
