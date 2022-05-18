@@ -21,10 +21,7 @@ import CustomTextbox from '@/components/CustomTextbox/CustomTextbox.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
 import { reactive, type PropType, onMounted } from 'vue';
 import { ethers } from 'ethers';
-import {
-  collectiblesAbi,
-  collectiblesBytecode
-} from '@/assets/json/constants.json';
+import Collectible from '@/assets/json/collectibles';
 import type { TypeCollectibles, TypeDisabled } from './types';
 
 const props = defineProps({
@@ -57,8 +54,8 @@ const deployClick = async () => {
   collectibles.status = 'Deploying';
 
   const collectiblesFactory = new ethers.ContractFactory(
-    collectiblesAbi,
-    collectiblesBytecode,
+    Collectible.collectiblesAbi,
+    Collectible.collectiblesBytecode,
     ethersSigner
   );
 

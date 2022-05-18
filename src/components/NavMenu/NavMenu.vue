@@ -1,13 +1,8 @@
 <template>
-  <v-app-bar color="blue" flat>
+  <v-app-bar color="#0c1427" flat>
     <v-container>
       <div class="d-flex align-center">
-        <img
-          src="@/assets/images/logo-mew.svg"
-          alt="Myetherwallet.com"
-          height="30"
-          class="mr-10"
-        />
+        <img :src="logo" alt="Myetherwallet.com" height="30" class="mr-10" />
 
         <div v-if="false" class="d-flex align-end" style="width: 400px">
           <v-icon class="mr-1">mdi-magnify</v-icon>
@@ -23,3 +18,6 @@
     </v-container>
   </v-app-bar>
 </template>
+<script setup lang="ts">
+const logo = require('@/assets/images/logo-mew.svg');
+</script>

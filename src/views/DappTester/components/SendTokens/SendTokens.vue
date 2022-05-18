@@ -28,7 +28,7 @@
 import { ethers } from 'ethers';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-import { hstBytecode, hstAbi } from '@/assets/json/constants.json';
+import Collectible from '@/assets/json/collectibles';
 import { reactive, ref, type PropType, onMounted } from 'vue';
 import type { TypeDisabled } from './types';
 
@@ -65,8 +65,8 @@ onMounted(() => {
 const createToken = async () => {
   try {
     const hstFactory = new ethers.ContractFactory(
-      hstAbi,
-      hstBytecode,
+      Collectible.hstAbi,
+      Collectible.hstBytecode,
       ethersSigner
     );
     const Contract = await hstFactory.deploy(
@@ -97,8 +97,9 @@ const createToken = async () => {
 };
 
 const watchAssetClick = async () => {
-  if (tokenAddress.value == 'Creation Failed' || tokenAddress.value == 'null')
+  if (tokenAddress.value == 'Creation Failed' || tokenAddress.value == 'null') {
     return;
+  }
   const result = await ethereum.request({
     method: 'wallet_watchAsset',
     params: {
@@ -107,7 +108,7 @@ const watchAssetClick = async () => {
         address: tokenAddress.value,
         symbol: _tokenSymbol,
         decimals: _decimalUnits,
-        image: '@/assets/images/logo-mew.svg'
+        image: require('@/assets/images/logo-mew.svg')
       }
     }
   });
