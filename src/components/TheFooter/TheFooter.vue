@@ -1,18 +1,16 @@
 <template>
   <div class="the-footer">
     <v-container class="d-flex align-center justify-start">
-      <img
-        src="@/assets/images/logo-mew-dark.svg"
-        alt="Myetherwallet.com"
-        height="17"
-        class="mr-3"
-      />
+      <img :src="logo" alt="Myetherwallet.com" height="17" class="mr-3" />
       <h6 class="text-secondary">
         ©2022 MyEtherWallet Inc. All rights reserved
       </h6>
     </v-container>
   </div>
 </template>
+<script setup lang="ts">
+const logo = require('@/assets/images/logo-mew-dark.svg');
+</script>
 
 <style lang="scss" scoped>
 .the-footer {

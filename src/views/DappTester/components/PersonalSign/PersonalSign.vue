@@ -34,10 +34,10 @@ import { Buffer } from 'buffer';
 const ethereum = window.ethereum;
 
 let account = '';
-let personalSignResult = ref<string>('');
-let disablePersonalSignVerify = ref<boolean>(true);
-let personalSignVerifySigUtilResult = ref<string>('');
-let personalSignVerifyECRecoverResult = ref<string>('');
+const personalSignResult = ref<string>('');
+const disablePersonalSignVerify = ref<boolean>(true);
+const personalSignVerifySigUtilResult = ref<string>('');
+const personalSignVerifyECRecoverResult = ref<string>('');
 
 /**
  * Personal Sign

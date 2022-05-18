@@ -16,7 +16,7 @@ import type { PermissionObject } from './types';
 import { ref } from 'vue';
 
 const ethereum = window.ethereum;
-let permissionsResult = ref<string>('');
+const permissionsResult = ref<string>('');
 
 const requestPermissions = async () => {
   try {
