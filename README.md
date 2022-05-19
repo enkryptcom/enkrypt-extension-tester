@@ -14,9 +14,17 @@ https://myetherwallet.github.io/web3-extension-tester/
 
 3. Run `yarn install` to install Node packages
 
-4. Run `yarn serve`
+4. Run `yarn build` to create the build
 
-5. App should be running on `https://localhost:8080`
+5. Run `yarn serve`
+
+6. App should be running on `https://localhost:8080`
+
+---
+
+## Deploying
+
+After making a change, please commit the new `/dist` directory and run `yarn deploy` in the package root directory to publish new changes.
 
 ---
 Special thanks to [MetaMask](https://github.com/MetaMask/test-dapp) for providing the some of the code base.
