@@ -1,11 +1,5 @@
 <template>
   <CustomCard title="Eth Sign">
-    <v-text-field
-      hide-details
-      v-model="message"
-      variant="outlined"
-      label="Message"
-    ></v-text-field>
     <CustomBtn @click="onClickSign">Sign</CustomBtn>
     <CustomTextbox title="Result">{{ ethSignResult }}</CustomTextbox>
   </CustomCard>
@@ -31,7 +25,7 @@ const onClickSign = async () => {
       method: 'eth_sign',
       params: [account, message.value]
     });
-    ethSignResult.value = JSON.stringify(ethResult);
+    ethSignResult.value = ethResult;
   } catch (error) {
     const err = error as Error;
     console.error(err);

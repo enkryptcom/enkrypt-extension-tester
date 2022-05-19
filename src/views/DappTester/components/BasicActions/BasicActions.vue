@@ -132,7 +132,6 @@ const initialize = async () => {
   ethereum.on('accountsChanged', (newAccounts: string[]) => {
     handleNewAccounts(newAccounts);
   });
-
   try {
     const newAccounts = await ethereum.request({
       method: 'eth_accounts'
