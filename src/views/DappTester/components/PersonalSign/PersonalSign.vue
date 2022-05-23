@@ -1,6 +1,7 @@
 <template>
   <CustomCard title="Personal Sign">
-    <CustomBtn @click="onclickPersonalSign">Sign</CustomBtn>
+    <CustomBtn v-if="!isConnected" disabled>Sign</CustomBtn>
+    <CustomBtn v-else @click="onclickPersonalSign">Sign</CustomBtn>
 
     <CustomTextbox title="Result">{{ personalSignResult }} </CustomTextbox>
 
@@ -32,12 +33,21 @@ import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
-
-let account = '';
 const personalSignResult = ref<string>('');
 const disablePersonalSignVerify = ref<boolean>(true);
 const personalSignVerifySigUtilResult = ref<string>('');
 const personalSignVerifyECRecoverResult = ref<string>('');
+
+const props = defineProps({
+  fromAccount: {
+    type: String,
+    default: ''
+  },
+  isConnected: {
+    type: Boolean,
+    default: false
+  }
+});
 
 /**
  * Personal Sign
@@ -45,7 +55,7 @@ const personalSignVerifyECRecoverResult = ref<string>('');
 const onclickPersonalSign = async () => {
   const exampleMessage = 'Example `personal_sign` message';
   try {
-    const from = account;
+    const from = props.fromAccount;
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
     const sign = await ethereum.request({
       method: 'personal_sign',
@@ -65,7 +75,7 @@ const onclickPersonalSign = async () => {
 const onclickPersonalSignVerify = async () => {
   const exampleMessage = 'Example `personal_sign` message';
   try {
-    const from = account;
+    const from = props.fromAccount;
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
     const sign = personalSignResult.value;
     const recoveredAddr = recoverPersonalSignature({
@@ -99,17 +109,4 @@ const onclickPersonalSignVerify = async () => {
     personalSignVerifyECRecoverResult.value = `Error: ${err}`;
   }
 };
-
-const getAccount = async () => {
-  try {
-    const accounts = await ethereum.request({
-      method: 'eth_requestAccounts'
-    });
-    account = accounts[0];
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-getAccount();
 </script>
