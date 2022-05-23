@@ -11,16 +11,28 @@
           @setIsConnected="setIsConnected"
       /></v-col>
       <v-col cols="12" md="4"><PermissionsActions /></v-col>
-      <v-col cols="12" md="4"><SendEth /></v-col>
+      <v-col cols="12" md="4"><SendEth :from-account="fromAccount" /></v-col>
       <v-col cols="12" md="4"><Contract /></v-col>
       <v-col cols="12" md="4"><SendTokens :accounts="accounts" /></v-col>
-      <v-col cols="12" md="4"><FailingContract /></v-col>
+      <v-col cols="12" md="4"
+        ><FailingContract
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+      /></v-col>
       <v-col cols="12" md="4"
         ><CollectiblesModule :accounts="accounts"
       /></v-col>
-      <v-col cols="12" md="4"><EncryptDecrypt /></v-col>
-      <v-col cols="12" md="4"><EthSign /></v-col>
-      <v-col cols="12" md="4"><PersonalSign /></v-col>
+      <v-col cols="12" md="4"
+        ><EncryptDecrypt
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><EthSign :from-account="fromAccount" :is-connected="isConnected"
+      /></v-col>
+      <v-col cols="12" md="4"
+        ><PersonalSign :from-account="fromAccount" :is-connected="isConnected"
+      /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedData :from-account="fromAccount" :is-connected="isConnected"
       /></v-col>
@@ -39,15 +51,10 @@
           :chain-id="chainId"
       /></v-col>
       <v-col cols="12" md="4"
-        ><EthereumChainInteractions
-          :ethereum="ethereum"
-          :is-connected="isConnected"
+        ><EthereumChainInteractions :is-connected="isConnected"
       /></v-col>
       <v-col cols="12" md="4"
-        ><SendForm
-          :ethereum="ethereum"
-          :from-account="fromAccount"
-          :is-connected="isConnected"
+        ><SendForm :from-account="fromAccount" :is-connected="isConnected"
       /></v-col>
     </v-row>
   </v-container>
