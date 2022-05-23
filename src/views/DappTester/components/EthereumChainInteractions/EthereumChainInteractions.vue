@@ -1,9 +1,9 @@
 <template>
   <CustomCard title="Ethereum Chain Interactions">
-    <CustomBtn :disabled="!isConnected" @click="addEthereumChain()"
+    <CustomBtn :disabled="!props.isConnected" @click="addEthereumChain()"
       >Add xDAI Chain
     </CustomBtn>
-    <CustomBtn :disabled="!isConnected" @click="switchEthereumChain()"
+    <CustomBtn :disabled="!props.isConnected" @click="switchEthereumChain()"
       >Switch to xDAI Chain
     </CustomBtn>
   </CustomCard>
@@ -12,12 +12,9 @@
 <script setup lang="ts">
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
+const ethereum = window.ethereum;
 
 const props = defineProps({
-  ethereum: {
-    type: Object,
-    default: null
-  },
   isConnected: {
     type: Boolean,
     default: false
@@ -25,7 +22,7 @@ const props = defineProps({
 });
 
 const addEthereumChain = async () => {
-  await props.ethereum.request({
+  await ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
       {
@@ -40,7 +37,7 @@ const addEthereumChain = async () => {
 };
 
 const switchEthereumChain = async () => {
-  await props.ethereum.request({
+  await ethereum.request({
     method: 'wallet_switchEthereumChain',
     params: [
       {

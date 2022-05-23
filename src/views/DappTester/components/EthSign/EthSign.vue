@@ -1,6 +1,7 @@
 <template>
   <CustomCard title="Eth Sign">
-    <CustomBtn @click="onClickSign">Sign</CustomBtn>
+    <CustomBtn v-if="!isConnected" @click="onClickSign">Sign</CustomBtn>
+    <CustomBtn v-else @click="onClickSign">Sign</CustomBtn>
     <CustomTextbox title="Result">{{ ethSignResult }}</CustomTextbox>
   </CustomCard>
 </template>
@@ -17,13 +18,23 @@ const message = ref<string>(
   '0x879a053d4800c6354e76c7985a865d2922c82fb5b3f4577b2fe08b998954f2e0'
 );
 const ethSignResult = ref<string>('');
-let account: unknown = '';
+
+const props = defineProps({
+  fromAccount: {
+    type: String,
+    default: ''
+  },
+  isConnected: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const onClickSign = async () => {
   try {
     const ethResult = await ethereum.request({
       method: 'eth_sign',
-      params: [account, message.value]
+      params: [props.fromAccount, message.value]
     });
     ethSignResult.value = ethResult;
   } catch (error) {
@@ -32,18 +43,4 @@ const onClickSign = async () => {
     ethSignResult.value = `Error: ${err.message}`;
   }
 };
-
-const getAccount = async () => {
-  try {
-    const accounts = await ethereum.request({
-      method: 'eth_requestAccounts'
-    });
-    account = accounts[0];
-  } catch (error) {
-    const err = error as Error;
-    console.log(err);
-  }
-};
-
-getAccount();
 </script>

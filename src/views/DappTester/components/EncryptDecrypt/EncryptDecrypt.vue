@@ -1,6 +1,7 @@
 <template>
   <CustomCard title="Encrypt / Decrypt">
-    <CustomBtn @click="onclickGetEncryptionKeyButton">
+    <CustomBtn v-if="!isConnected" disabled>Get Encryption Key</CustomBtn>
+    <CustomBtn v-else @click="onclickGetEncryptionKeyButton">
       Get Encryption Key
     </CustomBtn>
 
@@ -44,22 +45,31 @@ import { ethers } from 'ethers';
 import { Buffer } from 'buffer';
 
 const ethereum = window.ethereum;
-
 const encryptMessageInput = ref('');
 const encryptionKeyDisplay = ref('');
 const ciphertextDisplay = ref('');
 const cleartextDisplay = ref('');
-let account = '';
 const encryptMessageInputDisabled = ref(true);
 const getEncryptionKeyButtonDisabled = ref(false);
 const encryptButtonDisabled = ref(true);
 const decryptButtonDisabled = ref(true);
 
+const props = defineProps({
+  fromAccount: {
+    type: String,
+    default: ''
+  },
+  isConnected: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const onclickGetEncryptionKeyButton = async () => {
   try {
     encryptionKeyDisplay.value = await ethereum.request({
       method: 'eth_getEncryptionPublicKey',
-      params: [account]
+      params: [props.fromAccount]
     });
     encryptMessageInputDisabled.value = false;
   } catch (error) {
@@ -113,20 +123,7 @@ const onclickEncryptButton = () => {
   }
 };
 
-const stringifiableToHex = value => {
+const stringifiableToHex = (value: any) => {
   return ethers.utils.hexlify(Buffer.from(JSON.stringify(value)));
 };
-
-const getAccount = async () => {
-  try {
-    const accounts = await ethereum.request({
-      method: 'eth_requestAccounts'
-    });
-    account = accounts[0];
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-getAccount();
 </script>

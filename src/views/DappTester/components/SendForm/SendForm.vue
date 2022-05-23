@@ -71,7 +71,7 @@
 import { ref } from 'vue';
 import CustomCard from '@/components/CustomCard/CustomCard.vue';
 import CustomBtn from '@/components/CustomBtn/CustomBtn.vue';
-
+const ethereum = window.ethereum;
 const from = ref<string>('');
 const to = ref<string>('');
 const amount = ref<string>('');
@@ -80,16 +80,6 @@ const gasPrice = ref<string>('');
 const type = ref<string>('0x0');
 
 const props = defineProps({
-  ethereum: {
-    type: Object,
-    default: null
-  },
-  handleEIP1559Support: {
-    default: () => {
-      return {};
-    },
-    type: Function
-  },
   fromAccount: {
     type: String,
     default: ''
@@ -101,7 +91,7 @@ const props = defineProps({
 });
 
 const send = async () => {
-  const results = await props.ethereum.request({
+  const results = await ethereum.request({
     method: 'eth_sendTransaction',
     params: [
       {
