@@ -24,7 +24,6 @@ import { ethers } from 'ethers';
 import PiggyBank from '@/assets/json/piggybank';
 
 const ethereum = window.ethereum;
-
 let failingContractDeployed: ethers.Contract;
 const ethersProvider = new ethers.providers.Web3Provider(
   window.ethereum,
@@ -35,9 +34,19 @@ const failingContractFactory = new ethers.ContractFactory(
   PiggyBank.failingContractBytecode,
   ethersProvider.getSigner()
 );
-let account = '';
 const failingContractStatus = ref<string>('');
 const sendFailingButtonDisabled = ref<boolean>(true);
+
+const props = defineProps({
+  fromAccount: {
+    type: String,
+    default: ''
+  },
+  isConnected: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const onclickDeployFailingContract = async () => {
   failingContractStatus.value = 'Deploying';
@@ -69,7 +78,7 @@ const onclickSendFailing = async () => {
       method: 'eth_sendTransaction',
       params: [
         {
-          from: account,
+          from: props.fromAccount,
           to: failingContractDeployed.address,
           value: '0x0',
           gasLimit: '0x5028',
@@ -87,18 +96,4 @@ const onclickSendFailing = async () => {
     throw err;
   }
 };
-
-const getAccount = async () => {
-  try {
-    const accounts = await ethereum.request({
-      method: 'eth_requestAccounts'
-    });
-    account = accounts[0];
-  } catch (error) {
-    const err = error as Error;
-    console.log(err);
-  }
-};
-
-getAccount();
 </script>
