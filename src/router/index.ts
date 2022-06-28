@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DappTester from '../views/DappTester/DappTester.vue';
 
 const router = createRouter({
-  history: createWebHistory('/web3-extension-tester/'),
+  history: createWebHistory('/enkrypt-extension-tester/'),
   routes: [
     {
       path: '/',
