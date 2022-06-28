@@ -2,7 +2,7 @@
 
 MyEtherWallet's Web3 Extension tester for end-to-end testing and quality assurance. 
 
-https://myetherwallet.github.io/web3-extension-tester/
+https://enkryptcom.github.io/enkrypt-extension-tester/
 
 ---
 
@@ -10,7 +10,7 @@ https://myetherwallet.github.io/web3-extension-tester/
 
 1. Open terminal
   
-2. Clone the repo: `https://github.com/MyEtherWallet/web3-extension-tester.git`
+2. Clone the repo: `https://github.com/enkryptcom/enkrypt-extension-tester.git`
 
 3. Run `yarn install` to install Node packages
 
