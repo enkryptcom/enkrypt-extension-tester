@@ -57,6 +57,7 @@ const onclickPersonalSign = async () => {
   try {
     const from = props.fromAccount;
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
+    console.log(from, msg);
     const sign = await ethereum.request({
       method: 'personal_sign',
       params: [msg, from, 'Example password']

@@ -75,7 +75,7 @@ const handleNewAccounts = (newAccounts: string[]) => {
   accounts.list = newAccounts;
   if (isWeb3Connected()) {
     emits('setAccounts', newAccounts);
-    emits('setFromAccount', newAccounts.toString());
+    emits('setFromAccount', newAccounts[0]);
     emits('setIsConnected', true);
   }
   updateButtons();

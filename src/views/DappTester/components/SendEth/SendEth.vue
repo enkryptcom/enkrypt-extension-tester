@@ -48,7 +48,7 @@ const sendTx = async () => {
         from: props.fromAccount,
         to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
         value: '0x0',
-        gasLimit: '0x5028',
+        gasLimit: '0x5208',
         gasPrice: '0x2540be400',
         type: '0x0'
       }
@@ -65,7 +65,7 @@ const sendTxEIP1559 = async () => {
         from: props.fromAccount,
         to: '0x1cC1D4F49E27Ac6b0b7D55A14B8F07179D8aFaf4',
         value: '0x0',
-        gasLimit: '0x5028',
+        gasLimit: '0x5208',
         maxFeePerGas: '0x2540be400',
         maxPriorityFeePerGas: '0x3b9aca00'
       }
