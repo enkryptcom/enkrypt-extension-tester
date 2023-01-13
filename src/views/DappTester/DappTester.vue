@@ -40,16 +40,15 @@
         ><SignTypedDataV3
           :from-account="fromAccount"
           :is-connected="isConnected"
-          :network-id="networkId"
           :chain-id="chainId"
       /></v-col>
       <v-col cols="12" md="4"
         ><SignTypedDataV4
           :from-account="fromAccount"
           :is-connected="isConnected"
-          :network-id="networkId"
           :chain-id="chainId"
       /></v-col>
+      <v-col cols="12" md="4"><polkadot-dapp /></v-col>
       <v-col cols="12" md="4"
         ><EthereumChainInteractions :is-connected="isConnected"
       /></v-col>
@@ -76,6 +75,7 @@ import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
 import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
+import polkadotDapp from './components/polkadot-dapp/polkadotDapp.vue';
 import { ref, onMounted } from 'vue';
 
 const fromAccount = ref<string>('');

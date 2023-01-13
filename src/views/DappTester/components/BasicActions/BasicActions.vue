@@ -83,6 +83,7 @@ const handleNewAccounts = (newAccounts: string[]) => {
 
 const handleNewChain = (chainID: string) => {
   chainId.value = chainID;
+  emits('setChainId', chainId.value);
 };
 
 const handleNewNetwork = (networkID: string) => {

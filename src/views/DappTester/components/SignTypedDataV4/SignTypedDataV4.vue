@@ -52,19 +52,15 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  networkId: {
-    type: String,
-    default: ''
-  },
   chainId: {
     type: String,
     default: ''
   }
 });
 
-const msgParams = {
+const msgParams = () => ({
   domain: {
-    chainId: props.networkId,
+    chainId: parseInt(BigInt(props.chainId).toString()),
     name: 'Ether Mail',
     verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
     version: '1'
@@ -111,14 +107,14 @@ const msgParams = {
       { name: 'wallets', type: 'address[]' }
     ]
   }
-};
+});
 
 const signV4 = async () => {
   try {
     const from = props.fromAccount;
     const signedData = await ethereum.request({
       method: 'eth_signTypedData_v4',
-      params: [from, JSON.stringify(msgParams)]
+      params: [from, JSON.stringify(msgParams())]
     });
     messageData.value = signedData;
     isSigned.value = true;
@@ -130,7 +126,7 @@ const verify = async () => {
   const from = props.fromAccount;
   const signature = messageData.value;
   const recoveredAddr = recoverTypedSignature({
-    data: msgParams as never,
+    data: msgParams() as never,
     signature,
     version: SignTypedDataVersion.V4
   });
