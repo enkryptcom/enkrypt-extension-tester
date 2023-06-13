@@ -48,6 +48,12 @@
           :is-connected="isConnected"
           :chain-id="chainId"
       /></v-col>
+      <v-col cols="12" md="4"
+        ><SignTypedDataMalicious
+          :from-account="fromAccount"
+          :is-connected="isConnected"
+          :chain-id="chainId"
+      /></v-col>
       <v-col cols="12" md="4"><polkadot-dapp /></v-col>
       <v-col cols="12" md="4"
         ><EthereumChainInteractions :is-connected="isConnected"
@@ -73,6 +79,7 @@ import PersonalSign from './components/PersonalSign/PersonalSign.vue';
 import SignTypedData from './components/SignTypedData/SignTypedData.vue';
 import SignTypedDataV3 from './components/SignTypedDataV3/SignTypedDataV3.vue';
 import SignTypedDataV4 from './components/SignTypedDataV4/SignTypedDataV4.vue';
+import SignTypedDataMalicious from './components/SignTypedDataMalicious/index.vue';
 import EthereumChainInteractions from './components/EthereumChainInteractions/EthereumChainInteractions.vue';
 import SendForm from './components/SendForm/SendForm.vue';
 import polkadotDapp from './components/polkadot-dapp/polkadotDapp.vue';

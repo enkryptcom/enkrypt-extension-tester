@@ -76,7 +76,7 @@ const onclickPersonalSign = async () => {
 const onclickPersonalSignVerify = async () => {
   const exampleMessage = 'Example `personal_sign` message';
   try {
-    const from = props.fromAccount;
+    const from = props.fromAccount.toLowerCase();
     const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
     const sign = personalSignResult.value;
     const recoveredAddr = recoverPersonalSignature({
