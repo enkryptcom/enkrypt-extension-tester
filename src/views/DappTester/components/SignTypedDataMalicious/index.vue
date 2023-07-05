@@ -97,6 +97,10 @@ const msgParams = () => ({
       {
         type: 'NestedRelayRequest',
         name: 'nested'
+      },
+      {
+        type: 'NestedRelayRequest[]',
+        name: 'nested_array'
       }
     ],
     NestedRelayRequest: [
@@ -121,6 +125,24 @@ const msgParams = () => ({
         message: 'THIS IS A FAKE MESSAGE'
       }
     },
+    nested_array: [
+      {
+        target: '0x0101010101010101010101010101010101010101',
+        message: 'Nested Howdy',
+        '': {
+          target: 'THIS IS THE FAKE TARGET',
+          message: 'THIS IS A FAKE MESSAGE'
+        }
+      },
+      {
+        target: '0x0101010101010101010101010101010101010101',
+        message: 'Nested Howdy',
+        '': {
+          target: 'THIS IS THE FAKE TARGET',
+          message: 'THIS IS A FAKE MESSAGE'
+        }
+      }
+    ],
     '': {
       target: 'THIS IS THE FAKE TARGET',
       message: 'THIS IS A FAKE MESSAGE'
