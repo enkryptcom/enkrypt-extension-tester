@@ -59,32 +59,72 @@ const props = defineProps({
 });
 
 const msgParams = () => ({
-  types: {
-    EIP712Domain: [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'verifyingContract', type: 'address' },
-      { name: 'chainId', type: 'uint256' }
-    ],
-    RelayRequest: [
-      { name: 'target', type: 'address' },
-      { name: 'message', type: 'string' }
-    ]
-  },
+  primaryType: 'RelayRequest',
   domain: {
     name: 'EIP-712 Test - Relayed Transaction',
+    verifyingContract: '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef',
     version: '1',
-    chainId: 1,
-    verifyingContract: '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
+    chainId: 1
   },
-  primaryType: 'RelayRequest',
+  types: {
+    EIP712Domain: [
+      {
+        name: 'name',
+        type: 'string'
+      },
+      {
+        type: 'string',
+        name: 'version'
+      },
+      {
+        type: 'address',
+        name: 'verifyingContract'
+      },
+      {
+        name: 'chainId',
+        type: 'uint256'
+      }
+    ],
+    RelayRequest: [
+      {
+        type: 'address',
+        name: 'target'
+      },
+      {
+        type: 'string',
+        name: 'message'
+      },
+      {
+        type: 'NestedRelayRequest',
+        name: 'nested'
+      }
+    ],
+    NestedRelayRequest: [
+      {
+        type: 'address',
+        name: 'target'
+      },
+      {
+        type: 'string',
+        name: 'message'
+      }
+    ]
+  },
   message: {
+    target: '0x0101010101010101010101010101010101010101',
+    message: 'Howdy',
+    nested: {
+      target: '0x0101010101010101010101010101010101010101',
+      message: 'Nested Howdy',
+      '': {
+        target: 'THIS IS THE FAKE TARGET',
+        message: 'THIS IS A FAKE MESSAGE'
+      }
+    },
     '': {
       target: 'THIS IS THE FAKE TARGET',
       message: 'THIS IS A FAKE MESSAGE'
-    },
-    target: '0x0101010101010101010101010101010101010101',
-    message: 'Howdy'
+    }
   }
 });
 
